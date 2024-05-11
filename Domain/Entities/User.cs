@@ -41,6 +41,7 @@ namespace Domain.Entities
 
             try
             {
+                // ReSharper disable once ObjectCreationAsStatement
                 new MailAddress(email);
             }
             catch
@@ -87,6 +88,7 @@ namespace Domain.Entities
         {
             try
             {
+                // ReSharper disable once ObjectCreationAsStatement
                 new MailAddress(email);
             }
             catch
