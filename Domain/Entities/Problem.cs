@@ -1,5 +1,5 @@
-﻿using HealthcareManagementSystem.Domain.Common;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
+using Domain.Common;
 
 namespace Domain.Entities;
 

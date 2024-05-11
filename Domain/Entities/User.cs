@@ -1,5 +1,5 @@
-﻿using HealthcareManagementSystem.Domain.Common;
-using System.Net.Mail;
+﻿using System.Net.Mail;
+using Domain.Common;
 using Domain.Data;
 
 namespace Domain.Entities

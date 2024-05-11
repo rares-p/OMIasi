@@ -1,4 +1,4 @@
-﻿using HealthcareManagementSystem.Domain.Common;
+﻿using Domain.Common;
 
 namespace Application.Contracts.Repositories;
 

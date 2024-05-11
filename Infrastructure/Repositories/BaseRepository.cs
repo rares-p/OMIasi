@@ -1,5 +1,5 @@
 ﻿using Application.Contracts.Repositories;
-using HealthcareManagementSystem.Domain.Common;
+using Domain.Common;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
