@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
-public class AuthenticationController(IAuthService authService) : ControllerBase
+public class AuthenticationController(IAuthService authService) : Controller
 {
     [HttpPost]
     [Route("register")]

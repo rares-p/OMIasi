@@ -65,8 +65,8 @@ namespace API.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ProblemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Index = table.Column<long>(type: "bigint", nullable: false),
-                    Input = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Output = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Input = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    Output = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
                     Score = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
