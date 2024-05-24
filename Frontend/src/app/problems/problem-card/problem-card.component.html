@@ -1,0 +1,11 @@
+<div class="card" *ngIf="problem">
+    <div class="card-body">
+        <h5 class="card-title">{{ problem.title }}</h5>
+        <p class="card-text">{{ problem.description }}</p>
+        <p class="card-text">Author: {{ problem.author }}</p>
+        <p class="card-text">Grade: {{ problem.grade }}</p>
+    </div>
+    <div class="card-footer text-muted d-flex justify-content-end">
+        <button class="btn btn-primary">Solve</button>
+    </div>
+</div>

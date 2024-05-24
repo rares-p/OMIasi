@@ -1,0 +1,134 @@
+/* General form styles */
+form {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 1.5rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+}
+
+div {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+input, textarea, button {
+    padding: 0.5rem;
+    font-size: 0.9rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+input, textarea {
+    background-color: #fff;
+    transition: border-color 0.2s;
+}
+
+input:focus, textarea:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+textarea {
+    resize: vertical;
+}
+
+button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+button:not(:disabled):hover {
+    background-color: #0056b3;
+}
+
+/* Error message styles */
+div div {
+    color: red;
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+}
+
+/* File list styles */
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+}
+
+li span {
+    flex-grow: 1;
+}
+
+li button {
+    margin-left: 5px;
+    padding: 0.3rem;
+    font-size: 0.8rem;
+}
+
+.file-upload {
+    margin-top: 1rem;
+}
+
+.file-upload label {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #333;
+    display: block;
+}
+
+.file-upload input[type="file"] {
+    border: none;
+    margin-bottom: 1rem;
+    padding: 0;
+}
+
+.file-upload div {
+    color: red;
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+    display: block;
+}
+
+.file-upload ul {
+    margin-top: 0.5rem;
+}
+
+.file-upload li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.file-upload li span {
+    flex-grow: 1;
+}
+
+.file-upload li button {
+    margin-left: 5px;
+    padding: 0.3rem;
+    font-size: 0.8rem;
+}
