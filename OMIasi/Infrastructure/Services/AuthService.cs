@@ -7,22 +7,24 @@ using Application.Models.Identity;
 using Domain.Common;
 using Domain.Data;
 using Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Infrastructure.Services;
 
-public class AuthService(IUserRepository userRepository, IConfiguration configuration) : IAuthService
+public class AuthService(IUserRepository userRepository, IConfiguration configuration, IPasswordHasher<User> passwordHasher) : IAuthService
 {
     public async Task<Result<string>> Registration(RegistrationModel model)
     {
-        if(await userRepository.ExistsAsync(model.Username))
+        if (await userRepository.ExistsAsync(model.Username))
             return Result<string>.Failure($"User with username {model.Username} already exists!");
 
-        var userCreationResult = User.Create(model.Username, model.Password, model.Firstname, model.Lastname,
+        var passwordHash = passwordHasher.HashPassword(null!, model.Password);
+        var userCreationResult = User.Create(model.Username, passwordHash, model.Firstname, model.Lastname,
             model.Email, UserRole.Student);
 
-        if(!userCreationResult.IsSuccess)
+        if (!userCreationResult.IsSuccess)
             return Result<string>.Failure(userCreationResult.Error);
         try
         {
@@ -41,6 +43,9 @@ public class AuthService(IUserRepository userRepository, IConfiguration configur
         var user = await userRepository.FindByUserNameAsync(model.Username);
         if (!user.IsSuccess)
             return Result<string>.Failure($"User with username {model.Username} not found!");
+
+        if (passwordHasher.VerifyHashedPassword(null!, user.Value.PasswordHash, model.Password) == PasswordVerificationResult.Failed)
+            return Result<string>.Failure("Wrong password!");
 
         var claims = new List<Claim>
         {

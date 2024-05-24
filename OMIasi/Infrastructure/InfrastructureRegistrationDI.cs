@@ -1,9 +1,11 @@
 ﻿using System.Text;
 using Application.Contracts.Identity;
 using Application.Contracts.Repositories;
+using Domain.Entities;
 using Infrastructure.Repositories;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,6 +30,9 @@ public static class InfrastructureRegistrationDi
         services.AddScoped<IProblemRepository, ProblemRepository>();
         services.AddScoped<ITestRepository, TestRepository>();
         services.AddScoped<ISubmissionRepository, SubmissionRepository>();
+
+        services.AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();
+
 
         services.AddAuthentication(options =>
             {

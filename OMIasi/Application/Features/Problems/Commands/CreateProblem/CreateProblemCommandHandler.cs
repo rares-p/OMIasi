@@ -18,6 +18,13 @@ public class CreateProblemCommandHandler(IProblemRepository problemRepository, I
                 ValidationsErrors = validatorResult.Errors.Select(x => x.ErrorMessage).ToList()
             };
 
+        if (await problemRepository.ExistsAsync(request.Title))
+            return new CreateProblemCommandResponse()
+            {
+                Success = false,
+                ValidationsErrors = [$"Problem with Title {request.Title} already exists!"]
+            };
+
         var problem = Problem.Create(request.Title, request.Description, request.NoTests, request.Author,
             request.TimeLimitInSeconds, request.TotalMemoryLimitInMb, request.StackMemoryLimitInMb, request.Grade,
             request.InputFileName, request.OutputFileName, request.Contest);

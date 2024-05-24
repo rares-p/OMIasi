@@ -1,6 +1,7 @@
 ﻿using Application.Features.Problems.Commands.CreateProblem;
 using Application.Features.Problems.Queries.GetAll;
 using Application.Features.Problems.Queries.GetById;
+using Application.Features.Problems.Queries.GetByName;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
@@ -13,7 +14,7 @@ public class ProblemController: ApiControllerBase
     {
         var result = await Mediator.Send(new GetAllProblemsQuery());
 
-        return Ok(result);
+        return Ok(result.Problems);
     }
 
     [HttpGet("{id:guid}")]
@@ -24,8 +25,16 @@ public class ProblemController: ApiControllerBase
         return Ok(result);
     }
 
+    [HttpGet("{title}")]
+    public async Task<IActionResult> GetById(string title)
+    {
+        var result = await Mediator.Send(new GetByTitleProblemQuery(title));
+
+        return Ok(result);
+    }
+
     [HttpPost]
-    public async Task<IActionResult> Create(CreateProblemCommand command)
+    public async Task<IActionResult> Create([FromBody] CreateProblemCommand command)
     {
         var result = await Mediator.Send(command);
 

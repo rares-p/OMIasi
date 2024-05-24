@@ -13,12 +13,7 @@ public class Result<T> where T : class
     public T Value { get; }
     public string Error { get; }
 
-    public static Result<T> Success(T value)
-    {
-        return new Result<T>(true, value, null!);
-    }
-    public static Result<T> Failure(string error)
-    {
-        return new Result<T>(false, null!, error);
-    }
+    public static Result<T> Success(T value) => new(true, value, null!);
+
+    public static Result<T> Failure(string error) => new(false, null!, error);
 }

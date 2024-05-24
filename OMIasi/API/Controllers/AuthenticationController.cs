@@ -8,7 +8,7 @@ public class AuthenticationController(IAuthService authService) : Controller
 {
     [HttpPost]
     [Route("register")]
-    public async Task<IActionResult> RegisterUser(RegistrationModel model)
+    public async Task<IActionResult> RegisterUser([FromBody] RegistrationModel model)
     {
         try
         {
@@ -21,7 +21,8 @@ public class AuthenticationController(IAuthService authService) : Controller
 
             if (!authResult.IsSuccess)
             {
-                await authService.DeleteUser(authResult.Value);
+                if (authResult.Value != null!)
+                    await authService.DeleteUser(authResult.Value);
                 return BadRequest(authResult.Error);
             }
 
@@ -35,7 +36,7 @@ public class AuthenticationController(IAuthService authService) : Controller
 
     [HttpPost]
     [Route("login")]
-    public async Task<IActionResult> Login(LoginModel model)
+    public async Task<IActionResult> Login([FromBody] LoginModel model)
     {
         try
         {
