@@ -10,5 +10,5 @@ export interface Problem {
     grade: number,
     inputFileName: string,
     outputFileName: string
-    contest: number
+    year: number
 }

@@ -11,6 +11,6 @@ export type CreateProblem = {
     grade: number,
     inputFileName: string,
     outputFileName: string
-    contest: string,
+    year: number,
     tests: problemTest[]
 }

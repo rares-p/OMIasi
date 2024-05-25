@@ -17,7 +17,7 @@ public class GetAllProblemsQueryHandler(IProblemRepository repository) : IReques
                 Id = problem.Id,
                 Title = problem.Title,
                 Author = problem.Author,
-                Contest = problem.Contest,
+                Year = problem.Year,
                 Description = problem.Description,
                 Grade = problem.Grade,
                 InputFileName = problem.InputFileName,

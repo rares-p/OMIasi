@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(OMIIasiDbContext))]
-    [Migration("20240519111436_initial")]
+    [Migration("20240525091032_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -33,10 +33,6 @@ namespace API.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Author")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Contest")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -83,6 +79,9 @@ namespace API.Migrations
                     b.Property<float>("TotalMemoryLimitInMb")
                         .HasColumnType("real");
 
+                    b.Property<long>("Year")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
 
                     b.ToTable("Problems", "omiiasi");
@@ -102,6 +101,10 @@ namespace API.Migrations
 
                     b.Property<long>("Score")
                         .HasColumnType("bigint");
+
+                    b.Property<string>("Solution")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");

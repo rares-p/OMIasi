@@ -20,11 +20,11 @@ public partial class Problem : AuditableEntity
     [GeneratedRegex(@"^[^\r\n\\/:""*?<>|]+\.(out)$")]
     private static partial Regex OutputFileRegex();
     public string OutputFileName { get; private set;}
-    public string Contest { get; private set; }
+    public uint Year { get; private set; }
 
     private Problem(string title, string description, uint noTests, string author, float timeLimitInSeconds,
         float totalMemoryLimitInMb, float stackMemoryLimitInMb, uint grade, string inputFileName, string outputFileName,
-        string contest)
+        uint year)
     {
         Id = Guid.NewGuid();
         Title = title;
@@ -37,12 +37,12 @@ public partial class Problem : AuditableEntity
         Grade = grade;
         InputFileName = inputFileName;
         OutputFileName = outputFileName;
-        Contest = contest;
+        Year = year;
     }
 
     public static Result<Problem> Create(string title, string description, uint noTests, string author,
         float timeLimitInSeconds, float totalMemoryLimitInMb, float stackMemoryLimitInMb, uint grade,
-        string inputFileName, string outputFileName, string contest)
+        string inputFileName, string outputFileName, uint year)
     {
         if (string.IsNullOrWhiteSpace(title))
             return Result<Problem>.Failure("Problem title cannot be empty!");
@@ -62,11 +62,11 @@ public partial class Problem : AuditableEntity
             return Result<Problem>.Failure("Input file name must end with extension .in");
         if(!OutputFileRegex().IsMatch(outputFileName))
             return Result<Problem>.Failure("Output file name must end with extension .out");
-        if(string.IsNullOrWhiteSpace(contest))
-            return Result<Problem>.Failure("Problem contest cannot be empty!");
+        if(year > DateTime.Now.Year + 1)
+            return Result<Problem>.Failure("Problem year cannot be greater than current year!");
         return Result<Problem>.Success(new Problem(title, description, noTests, author,
             timeLimitInSeconds, totalMemoryLimitInMb,  stackMemoryLimitInMb, grade,
-            inputFileName, outputFileName, contest));
+            inputFileName, outputFileName, year));
     }
 
 }

@@ -5,10 +5,12 @@ import { AllProblemsComponent } from './problems/all-problems/all-problems.compo
 import { ProblemComponent } from './problems/problem/problem.component';
 import { CreateProblemComponent } from './problems/create-problem/create-problem.component';
 import { LoginComponent } from './user/login/login.component';
+import { RegisterComponent } from './user/register/register.component';
 
 export const routes: Routes = [
     { path: '', component: AllProblemsComponent },
     { path: 'problems/:id', component: ProblemComponent },
     { path: 'createProblem', component: CreateProblemComponent },
-    { path: 'login', component: LoginComponent }
+    { path: 'login', component: LoginComponent },
+    { path: 'register', component: RegisterComponent }
 ];

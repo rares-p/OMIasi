@@ -1,7 +1,50 @@
-<div *ngIf="problem">
-    <h5>{{ problem.title }}</h5>
-    <p>{{ problem.description }}</p>
-    <p>Author: {{ problem.author }}</p>
-    <p>Grade: {{ problem.grade }}</p>
-    <p>Time limit {{problem.timeLimitInSeconds}}</p>
+<div class="container mt-5">
+    <h2 class="text-center">{{ problem?.title }}</h2>
+
+    <table class="table table-striped mt-4">
+        <tbody>
+            <tr>
+                <th scope="row">Author</th>
+                <td>{{ problem?.author }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Grade</th>
+                <td>{{ problem?.grade }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Input File / Output File</th>
+                <td>
+                    {{ problem?.inputFileName }} / {{ problem?.outputFileName }}
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">Time Limit (s)</th>
+                <td>{{ problem?.timeLimitInSeconds }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Total Memory Limit (MB)</th>
+                <td>{{ problem?.totalMemoryLimitInMb }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Stack Memory Limit (MB)</th>
+                <td>{{ problem?.stackMemoryLimitInMb }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Year</th>
+                <td>{{ problem?.year }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Description</h5>
+            <p class="card-text">{{ problem?.description }}</p>
+        </div>
+    </div>
+
+    <div class="mb-4">
+        <h5>Write your solution:</h5>
+        <textarea id="code-editor" class="form-control" rows="10"></textarea>
+    </div>
 </div>

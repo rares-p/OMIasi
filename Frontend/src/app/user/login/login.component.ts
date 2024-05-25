@@ -1,45 +1,34 @@
 import { Component } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { UserService } from '../../services/user.service';
+import { AuthService } from '../../services/auth/auth.service';
 import { LoginModel } from '../../models/auth/loginModel';
-import { BaseResponse } from '../../models/responses/baseResponse';
+import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
-  loginModel: LoginModel = {
-    username: '',
-    password: ''
-  };
-  loginError: string | null = null;
-  private subscription?: Subscription;
+    loginModel: LoginModel = {
+        username: '',
+        password: '',
+    };
+    loginError: string | null = null;
 
-  constructor(private userService: UserService) { }
+    constructor(
+        private authService: AuthService,
+        private toastr: ToastrService,
+        private router: Router
+    ) {}
 
-  onSubmit(): void {
-    this.subscription = this.userService.login(this.loginModel)
-      .subscribe({
-        next: (response: BaseResponse) => {
-          if (response.success) {
-            console.log('Login successful');
-            // Redirect to another page or display a success message
-          } else {
-            console.error('Login failed:', response.error);
-            this.loginError = response.error;
-          }
-        },
-        error: (error: any) => {
-          console.error('An unexpected error occurred during login:', error);
-          this.loginError = 'An unexpected error occurred. Please try again later.';
+    async onSubmit(): Promise<void> {
+        const response = await this.authService.login(this.loginModel);
+        if (response.error) this.toastr.error(response.error);
+        else {
+            this.toastr.success('User sucessfully registered!');
+            this.router.navigate(['']);
         }
-      });
-  }
-
-  ngOnDestroy(): void {
-    // Unsubscribe from the observable to avoid memory leaks
-    this.subscription?.unsubscribe();
-  }
+    }
 }

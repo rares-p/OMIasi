@@ -33,10 +33,6 @@ namespace API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Contest")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -80,6 +76,9 @@ namespace API.Migrations
                     b.Property<float>("TotalMemoryLimitInMb")
                         .HasColumnType("real");
 
+                    b.Property<long>("Year")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
 
                     b.ToTable("Problems", "omiiasi");
@@ -99,6 +98,10 @@ namespace API.Migrations
 
                     b.Property<long>("Score")
                         .HasColumnType("bigint");
+
+                    b.Property<string>("Solution")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");

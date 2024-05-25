@@ -13,5 +13,5 @@ public class ProblemDto
     public uint Grade { get; set; }
     public string InputFileName { get; set; } = string.Empty;
     public string OutputFileName { get; set; } = string.Empty;
-    public string Contest { get; set; } = string.Empty;
+    public uint Year { get; set; }
 }

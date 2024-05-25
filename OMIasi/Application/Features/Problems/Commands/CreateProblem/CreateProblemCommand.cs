@@ -27,7 +27,7 @@ public class CreateProblemCommand : IRequest<CreateProblemCommandResponse>
     [Required(ErrorMessage = "Output File Name is required")]
     public required string OutputFileName { get; set; }
     [Required(ErrorMessage = "Problem year is required")]
-    public required string Contest { get; set; }
+    public required uint Year { get; set; }
     //[Required(ErrorMessage = "Problem Tests are required")]
     public List<TestModel> Tests { get; set; }
 }

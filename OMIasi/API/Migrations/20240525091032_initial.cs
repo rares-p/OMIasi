@@ -30,7 +30,7 @@ namespace API.Migrations
                     Grade = table.Column<long>(type: "bigint", nullable: false),
                     InputFileName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     OutputFileName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Contest = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Year = table.Column<long>(type: "bigint", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -50,7 +50,8 @@ namespace API.Migrations
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ProblemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Score = table.Column<long>(type: "bigint", nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Solution = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {

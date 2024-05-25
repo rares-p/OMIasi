@@ -1,5 +1,20 @@
 .problemListContainer {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Align items to the left */
+  padding: 20px;
+}
+
+.year-section {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start; /* Align items to the left */
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.problemListContainer h2 {
+  width: 100%;
+  text-align: left; /* Align year header to the left */
+  margin: 20px 0;
 }

@@ -27,7 +27,7 @@ public class CreateProblemCommandHandler(IProblemRepository problemRepository, I
 
         var problem = Problem.Create(request.Title, request.Description, request.NoTests, request.Author,
             request.TimeLimitInSeconds, request.TotalMemoryLimitInMb, request.StackMemoryLimitInMb, request.Grade,
-            request.InputFileName, request.OutputFileName, request.Contest);
+            request.InputFileName, request.OutputFileName, request.Year);
 
         if (!problem.IsSuccess)
             return new CreateProblemCommandResponse()
@@ -67,7 +67,7 @@ public class CreateProblemCommandHandler(IProblemRepository problemRepository, I
                 Id = problem.Value.Id,
                 Title = problem.Value.Title,
                 Author = problem.Value.Author,
-                Contest = problem.Value.Contest,
+                Year = problem.Value.Year,
                 Description = problem.Value.Description,
                 Grade = problem.Value.Grade,
                 InputFileName = problem.Value.InputFileName,

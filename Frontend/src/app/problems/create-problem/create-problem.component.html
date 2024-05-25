@@ -1,108 +1,135 @@
 <form [formGroup]="problemForm" (ngSubmit)="onSubmit()">
-  <div>
-    <label for="title">Title <i class="fas fa-heading"></i></label>
-    <input id="title" formControlName="title" />
-    <div *ngIf="isFieldInvalid('title')">
-      Title is required and must start with a capital letter.
+    <div>
+        <label for="title">Title <i class="fas fa-heading"></i></label>
+        <input id="title" formControlName="title" />
+        <div *ngIf="isFieldInvalid('title')">
+            Title is required and must start with a capital letter.
+        </div>
     </div>
-  </div>
 
-  <div>
-    <label for="description">Description <i class="fas fa-align-left"></i></label>
-    <textarea id="description" formControlName="description"></textarea>
-    <div *ngIf="isFieldInvalid('description')">
-      Description is required.
+    <div>
+        <label for="description">Description <i class="fas fa-align-left"></i></label>
+        <textarea id="description" formControlName="description"></textarea>
+        <div *ngIf="isFieldInvalid('description')">
+            Description is required.
+        </div>
     </div>
-  </div>
 
-  <div>
-    <label for="noTests">Number of Tests <i class="fas fa-list-ol"></i></label>
-    <input id="noTests" type="number" formControlName="noTests" />
-    <div *ngIf="isFieldInvalid('noTests')">
-      Number of Tests must be a positive integer.
+    <div>
+        <label for="year">Year <i class="fas fa-align-left"></i></label>
+        <input id="year" type="number" formControlName="year" />
+        <div *ngIf="isFieldInvalid('year')">
+            Year is required.
+        </div>
     </div>
-  </div>
 
-  <div>
-    <label for="author">Author <i class="fas fa-user"></i></label>
-    <input id="author" formControlName="author" />
-    <div *ngIf="isFieldInvalid('author')">
-      Author is required.
+    <div>
+        <label for="noTests">Number of Tests <i class="fas fa-list-ol"></i></label>
+        <input id="noTests" type="number" formControlName="noTests" />
+        <div *ngIf="isFieldInvalid('noTests')">
+            Number of Tests must be a positive integer.
+        </div>
     </div>
-  </div>
 
-  <div>
-    <label for="timeLimitInSeconds">Time Limit (seconds) <i class="fas fa-clock"></i></label>
-    <input id="timeLimitInSeconds" type="number" step="0.01" formControlName="timeLimitInSeconds" />
-    <div *ngIf="isFieldInvalid('timeLimitInSeconds')">
-      Time Limit must be a positive number.
+    <div>
+        <label for="author">Author <i class="fas fa-user"></i></label>
+        <input id="author" formControlName="author" />
+        <div *ngIf="isFieldInvalid('author')">
+            Author is required.
+        </div>
     </div>
-  </div>
 
-  <div>
-    <label for="totalMemoryLimitInMb">Total Memory Limit (MB) <i class="fas fa-memory"></i></label>
-    <input id="totalMemoryLimitInMb" type="number" formControlName="totalMemoryLimitInMb" />
-  </div>
-
-  <div>
-    <label for="stackMemoryLimitInMb">Stack Memory Limit (MB) <i class="fas fa-memory"></i></label>
-    <input id="stackMemoryLimitInMb" type="number" formControlName="stackMemoryLimitInMb" />
-  </div>
-
-  <div>
-    <label for="grade">Grade <i class="fas fa-graduation-cap"></i></label>
-    <input id="grade" type="number" formControlName="grade" />
-    <div *ngIf="isFieldInvalid('grade')">
-      Grade must be between 5 and 12.
+    <div>
+        <label for="timeLimitInSeconds">Time Limit (seconds) <i class="fas fa-clock"></i></label>
+        <input id="timeLimitInSeconds" type="number" step="0.01" formControlName="timeLimitInSeconds" />
+        <div *ngIf="isFieldInvalid('timeLimitInSeconds')">
+            Time Limit must be a positive number.
+        </div>
     </div>
-  </div>
 
-  <div>
-    <label for="inputFileName">Input File Name <i class="fas fa-file-alt"></i></label>
-    <input id="inputFileName" formControlName="inputFileName" />
-    <div *ngIf="isFieldInvalid('inputFileName')">
-      Input File Name is required and must be in the format filename.extension.
+    <div>
+        <label for="totalMemoryLimitInMb">Total Memory Limit (MB) <i class="fas fa-memory"></i></label>
+        <input id="totalMemoryLimitInMb" type="number" formControlName="totalMemoryLimitInMb" />
     </div>
-  </div>
 
-  <div>
-    <label for="outputFileName">Output File Name <i class="fas fa-file-alt"></i></label>
-    <input id="outputFileName" formControlName="outputFileName" />
-    <div *ngIf="isFieldInvalid('outputFileName')">
-      Output File Name is required and must be in the format filename.extension.
+    <div>
+        <label for="stackMemoryLimitInMb">Stack Memory Limit (MB) <i class="fas fa-memory"></i></label>
+        <input id="stackMemoryLimitInMb" type="number" formControlName="stackMemoryLimitInMb" />
     </div>
-  </div>
 
-   <div>
-    <label for="inputFiles">Upload Input Files <i class="fas fa-file-upload"></i></label>
-    <input id="inputFiles" type="file" (change)="onFilesSelected($event, 'input')" multiple />
-    <div *ngIf="inputFiles.length !== problemForm.value.noTests">
-      You must upload exactly {{ problemForm.value.noTests }} input files.
+    <div>
+        <label for="grade">Grade <i class="fas fa-graduation-cap"></i></label>
+        <input id="grade" type="number" formControlName="grade" />
+        <div *ngIf="isFieldInvalid('grade')">
+            Grade must be between 5 and 12.
+        </div>
     </div>
-    <ul>
-      <li *ngFor="let fileObj of inputFiles; let i = index">
-        <span>{{ i + 1 }}. {{ fileObj.file.name }}</span>
-        <button type="button" (click)="adjustFileIndex(inputFiles, i, 'up')" [disabled]="i === 0">Up</button>
-        <button type="button" (click)="adjustFileIndex(inputFiles, i, 'down')" [disabled]="i === inputFiles.length - 1">Down</button>
-      </li>
-    </ul>
-  </div>
 
-  <div>
-    <label for="outputFiles">Upload Output Files <i class="fas fa-file-upload"></i></label>
-    <input id="outputFiles" type="file" (change)="onFilesSelected($event, 'output')" multiple />
-    <div *ngIf="outputFiles.length !== problemForm.value.noTests">
-      You must upload exactly {{ problemForm.value.noTests }} output files.
+    <div>
+        <label for="inputFileName">Input File Name <i class="fas fa-file-alt"></i></label>
+        <input id="inputFileName" formControlName="inputFileName" />
+        <div *ngIf="isFieldInvalid('inputFileName')">
+            Input File Name is required and must be in the format filename.extension.
+        </div>
     </div>
-    <ul>
-      <li *ngFor="let fileObj of outputFiles; let i = index">
-        <span>{{ i + 1 }}. {{ fileObj.file.name }}</span>
-        <button type="button" (click)="adjustFileIndex(outputFiles, i, 'up')" [disabled]="i === 0">Up</button>
-        <button type="button" (click)="adjustFileIndex(outputFiles, i, 'down')" [disabled]="i === outputFiles.length - 1">Down</button>
-      </li>
-    </ul>
-  </div>
+
+    <div>
+        <label for="outputFileName">Output File Name <i class="fas fa-file-alt"></i></label>
+        <input id="outputFileName" formControlName="outputFileName" />
+        <div *ngIf="isFieldInvalid('outputFileName')">
+            Output File Name is required and must be in the format filename.extension.
+        </div>
+    </div>
+
+    <!-- <div>
+        <label for="inputFiles">Upload Input Files <i class="fas fa-file-upload"></i></label>
+        <input id="inputFiles" type="file" (change)="onFilesSelected($event, 'input')" multiple />
+        <div *ngIf="inputFiles.length !== problemForm.value.noTests">
+            You must upload exactly {{ problemForm.value.noTests }} input files.
+        </div>
+        <ul>
+            <li *ngFor="let fileObj of inputFiles; let i = index">
+                <span>{{ i + 1 }}. {{ fileObj.file.name }}</span>
+                <button type="button" (click)="adjustFileIndex(inputFiles, i, 'up')" [disabled]="i === 0">Up</button>
+                <button type="button" (click)="adjustFileIndex(inputFiles, i, 'down')"
+                    [disabled]="i === inputFiles.length - 1">Down</button>
+            </li>
+        </ul>
+    </div> -->
+
+    <div>
+        <label for="inputFiles">Upload Input Files <i class="fas fa-file-upload"></i></label>
+        <input id="inputFiles" type="file" (change)="onFilesSelected($event, 'input')" multiple />
+        <div *ngIf="inputFiles.length !== problemForm.value.noTests">
+          You must upload exactly {{ problemForm.value.noTests }} input files.
+        </div>
+        <ul>
+          <li *ngFor="let fileObj of inputFiles; let i = index">
+            <span>{{ i + 1 }}. {{ fileObj.file.name }}</span>
+            <button type="button" (click)="adjustFileIndex(inputFiles, i, 'up')" [disabled]="i === 0">Up</button>
+            <button type="button" (click)="adjustFileIndex(inputFiles, i, 'down')" [disabled]="i === inputFiles.length - 1">Down</button>
+            <label for="inputFileScore{{i}}">Score:</label>
+            <input id="inputFileScore{{i}}" type="number" [ngModelOptions]="{standalone: true}" [(ngModel)]="inputFiles[i].score" min="0" step="1" />
+          </li>
+        </ul>
+      </div>
+
+    <div>
+        <label for="outputFiles">Upload Output Files <i class="fas fa-file-upload"></i></label>
+        <input id="outputFiles" type="file" (change)="onFilesSelected($event, 'output')" multiple />
+        <div *ngIf="outputFiles.length !== problemForm.value.noTests">
+            You must upload exactly {{ problemForm.value.noTests }} output files.
+        </div>
+        <ul>
+            <li *ngFor="let fileObj of outputFiles; let i = index">
+                <span>{{ i + 1 }}. {{ fileObj.file.name }}</span>
+                <button type="button" (click)="adjustFileIndex(outputFiles, i, 'up')" [disabled]="i === 0">Up</button>
+                <button type="button" (click)="adjustFileIndex(outputFiles, i, 'down')"
+                    [disabled]="i === outputFiles.length - 1">Down</button>
+            </li>
+        </ul>
+    </div>
 
 
-  <button type="submit" [disabled]="problemForm.invalid || !isFileCountValid()">Submit</button>
+    <button type="submit" [disabled]="problemForm.invalid || !isFileCountValid()">Submit</button>
 </form>

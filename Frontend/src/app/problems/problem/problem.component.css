@@ -1,0 +1,25 @@
+.container {
+    max-width: 800px;
+    margin: auto;
+}
+
+.table {
+    margin-bottom: 40px;
+}
+
+.card {
+    margin-top: 20px;
+}
+
+#code-editor {
+    font-family: monospace;
+    font-size: 1rem;
+    background-color: #f8f9fa;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+}
+
+p {
+    white-space:pre-wrap;
+    word-wrap: break-word;
+}

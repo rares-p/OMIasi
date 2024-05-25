@@ -2,6 +2,7 @@
 using Application.Features.Problems.Queries.GetAll;
 using Application.Features.Problems.Queries.GetById;
 using Application.Features.Problems.Queries.GetByName;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
@@ -34,6 +35,7 @@ public class ProblemController: ApiControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Create([FromBody] CreateProblemCommand command)
     {
         var result = await Mediator.Send(command);

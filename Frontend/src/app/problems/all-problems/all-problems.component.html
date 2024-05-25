@@ -1,5 +1,13 @@
 <div class="problemListContainer">
-    <div *ngFor="let problem of problems" style="display: inline;">
-        <problem-card [problem]="problem"></problem-card>
-    </div>
-</div>
+    <ng-container *ngFor="let year of getYears()">
+      <div *ngIf="problemsByYear[year]?.length">
+        <h2>{{ year }}</h2>
+        <div class="year-section">
+          <div *ngFor="let problem of problemsByYear[year]">
+            <problem-card [problem]="problem"></problem-card>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+  

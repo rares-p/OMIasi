@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { AllProblemsComponent } from './all-problems/all-problems.component';
 import { ProblemCardComponent } from './problem-card/problem-card.component';
 import { ProblemComponent } from './problem/problem.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CreateProblemComponent } from './create-problem/create-problem.component';
 
 
@@ -16,6 +16,7 @@ import { CreateProblemComponent } from './create-problem/create-problem.componen
   ],
   imports: [
     CommonModule,
+    FormsModule,
     ReactiveFormsModule
   ]
 })

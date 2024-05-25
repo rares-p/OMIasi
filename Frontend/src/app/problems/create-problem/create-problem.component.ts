@@ -2,7 +2,9 @@ import { Component } from '@angular/core';
 import { CreateProblem } from '../../models/problems/createProblem';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { problemTest } from '../../models/problems/problemTest';
-import { ProblemService } from '../../services/problem.service';
+import { ProblemService } from '../../services/problems/problem.service';
+import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-create-problem',
@@ -11,16 +13,26 @@ import { ProblemService } from '../../services/problem.service';
 })
 export class CreateProblemComponent {
     problemForm: FormGroup;
-    inputFiles: { file: File; index: number }[] = [];
-    outputFiles: { file: File; index: number }[] = [];
+    inputFiles: { file: File; index: number; score: number }[] = [];
+    outputFiles: { file: File; index: number; score: number }[] = [];
 
     constructor(
         private fb: FormBuilder,
-        private problemService: ProblemService
+        private problemService: ProblemService,
+        private toastr: ToastrService,
+        private router: Router
     ) {
         this.problemForm = this.fb.group({
             title: ['', [Validators.required, Validators.pattern(/^[A-Z].*$/)]],
             description: ['', Validators.required],
+            year: [
+                '',
+                [
+                    Validators.required,
+                    Validators.min(1),
+                    Validators.max(new Date().getFullYear()),
+                ],
+            ],
             noTests: [null, [Validators.required, Validators.min(1)]],
             author: ['', Validators.required],
             timeLimitInSeconds: [
@@ -55,6 +67,7 @@ export class CreateProblemComponent {
         const filesArray = Array.from(files).map((file, index) => ({
             file,
             index,
+            score: 0,
         }));
 
         if (filesArray.length !== this.problemForm.value.noTests) {
@@ -94,9 +107,13 @@ export class CreateProblemComponent {
             for (let index = 0; index < this.inputFiles.length; index++) {
                 tests.push({
                     index: index,
-                    input: await this.readFileToBytesArray(this.inputFiles[index].file),
-                    output: await this.readFileToBytesArray(this.outputFiles[index].file),
-                    score: 0,
+                    input: await this.readFileToBytesArray(
+                        this.inputFiles[index].file
+                    ),
+                    output: await this.readFileToBytesArray(
+                        this.outputFiles[index].file
+                    ),
+                    score: this.inputFiles[index].score,
                 });
             }
             let createdProblem: CreateProblem = {
@@ -112,11 +129,21 @@ export class CreateProblemComponent {
                 grade: this.problemForm.value.grade,
                 inputFileName: this.problemForm.value.inputFileName,
                 outputFileName: this.problemForm.value.outputFileName,
-                contest: "0",
-                tests: tests
+                year: this.problemForm.value.year,
+                tests: tests,
             };
 
-            this.problemService.createProblem(createdProblem);
+            let problemCreateResponse = await this.problemService.createProblem(
+                createdProblem
+            );
+            if (problemCreateResponse.success) {
+                this.toastr.success('Problem created sucessfully');
+                this.router.navigate(["problems", createdProblem.title.split(' ').concat]);
+            } else
+                this.toastr.error(
+                    problemCreateResponse.error ??
+                        'Unknown error encountered, please try again later.'
+                );
         } else {
             console.log('Form is invalid or file count mismatch.');
         }

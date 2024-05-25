@@ -17,7 +17,7 @@ public class CreateProblemCommandValidator : AbstractValidator<CreateProblemComm
         RuleFor(problem => problem.Grade).NotEmpty().WithMessage("Grade is required");
         RuleFor(problem => problem.InputFileName).NotEmpty().WithMessage("Input File Name is required");
         RuleFor(problem => problem.OutputFileName).NotEmpty().WithMessage("Output File Name is required");
-        RuleFor(problem => problem.Contest).NotEmpty().WithMessage("Contest is required");
+        RuleFor(problem => problem.Year).NotEmpty().Must(year => year < DateTime.Now.Year + 1).WithMessage("Problem year cannot be greater than current year!");
 
         RuleFor(problem => problem.Tests).NotNull().WithMessage("Tests are required")
             .Must((problem, tests) => tests.Count == problem.NoTests)

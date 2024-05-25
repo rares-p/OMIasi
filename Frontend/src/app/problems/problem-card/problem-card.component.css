@@ -1,41 +1,52 @@
 .card {
-    margin-bottom: 20px;
+    width: 300px; /* Ensuring a fixed width for all cards */
+    height: 250px; /* Ensuring a fixed height for all cards */
+    margin: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: box-shadow 0.3s ease;
-}
-
-.card:hover {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .card:hover {
     box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
-}
-
-.card-title {
+  }
+  
+  .card-title {
     font-size: 1.25rem;
     font-weight: bold;
-}
-
-.card-footer {
-    background-color: #f8f9fa;
-}
-
-.card-footer button {
-    margin-right: 10px;
-}
-
-.card-footer {
-    position: relative;
-}
-
-.card-footer button {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-}
-
-.card-text {
+    white-space: nowrap; /* Prevents title from wrapping */
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .card-body {
+    flex-grow: 1; /* Makes body take available space */
+    overflow: hidden;
+  }
+  
+  .card-text {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     max-width: 100%;
-}
+  }
+  
+  .card-footer {
+    background-color: #f8f9fa;
+    position: relative;
+    padding: 10px;
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .card-footer button {
+    margin-right: 10px;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+  }
+  
