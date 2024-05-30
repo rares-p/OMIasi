@@ -7,6 +7,8 @@ import { catchError, map } from 'rxjs/operators';
 import { firstValueFrom, of } from 'rxjs';
 import { LoginModel } from '../../models/auth/loginModel';
 import { BaseServerResponse } from '../../models/responses/baseServerResponse';
+import { JwtPayload, jwtDecode } from 'jwt-decode';
+import { JwtInterface } from './jwt-interface';
 
 @Injectable({
     providedIn: 'root',
@@ -100,13 +102,21 @@ export class AuthService {
                 )
                 .pipe(
                     map((response) => {
-                        console.log(response);
-                        if (response.status === 200) {
-                            if (response.body?.value)
+                        if (!response.body)
+                            return {
+                                success: false,
+                                error: "Can't communicate with server.",
+                            };
+                        if (response.body.isSuccess) {
+                            if (response.body.value)
                                 localStorage.setItem(
                                     'token',
                                     response.body.value
                                 );
+                            let role = jwtDecode<JwtInterface>(
+                                response.body.value
+                            ).role;
+                            if (role) localStorage.setItem('role', role);
                             return { success: true, error: null };
                         } else {
                             const errorMessage = response.body!.error;
@@ -126,5 +136,13 @@ export class AuthService {
 
     getUserToken() {
         return localStorage.getItem('token');
+    }
+
+    getUserRole() {
+        return localStorage.getItem('role');
+    }
+
+    isAdmin(): boolean {
+        return this.getUserRole() == 'Admin' || this.getUserRole() == 'admin';
     }
 }

@@ -138,7 +138,7 @@ export class CreateProblemComponent {
             );
             if (problemCreateResponse.success) {
                 this.toastr.success('Problem created sucessfully');
-                this.router.navigate(["problems", createdProblem.title.split(' ').concat]);
+                this.router.navigate(["problems", createdProblem.title]);
             } else
                 this.toastr.error(
                     problemCreateResponse.error ??

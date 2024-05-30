@@ -1,6 +1,13 @@
 .container {
     max-width: 800px;
     margin: auto;
+    position: relative; /* Ensure the container is the positioning context */
+}
+
+.buttons-container {
+    position: absolute;
+    top: 10px; /* Adjust as needed */
+    right: 10px; /* Adjust as needed */
 }
 
 .table {
@@ -20,6 +27,6 @@
 }
 
 p {
-    white-space:pre-wrap;
+    white-space: pre-wrap;
     word-wrap: break-word;
 }

@@ -27,7 +27,7 @@ export class LoginComponent {
         const response = await this.authService.login(this.loginModel);
         if (response.error) this.toastr.error(response.error);
         else {
-            this.toastr.success('User sucessfully registered!');
+            this.toastr.success('User sucessfully logged in!');
             this.router.navigate(['']);
         }
     }

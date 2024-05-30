@@ -1,4 +1,5 @@
 ﻿using Application.Features.Problems.Commands.CreateProblem;
+using Application.Features.Problems.Commands.Delete;
 using Application.Features.Problems.Queries.GetAll;
 using Application.Features.Problems.Queries.GetById;
 using Application.Features.Problems.Queries.GetByName;
@@ -8,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers;
 
 [Route("problems")]
-public class ProblemController: ApiControllerBase
+public class ProblemController : ApiControllerBase
 {
     [HttpGet]
     public async Task<IActionResult> GetAll()
@@ -44,5 +45,16 @@ public class ProblemController: ApiControllerBase
             return BadRequest(result);
 
         return Ok(result);
+    }
+
+    [HttpDelete("{id:guid}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        var result = await Mediator.Send(new DeleteProblemCommand(id));
+
+        if (result.Success)
+            return Ok(result);
+        return BadRequest(result);
     }
 }

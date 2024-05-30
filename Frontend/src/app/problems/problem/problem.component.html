@@ -1,4 +1,8 @@
 <div class="container mt-5">
+    <div *ngIf="isAdmin" class="buttons-container position-absolute top-0 end-0">
+        <button id="editButton" class="btn btn-primary me-2">Edit</button>
+        <button id="deleteButton" class="btn btn-danger" (click)="deleteProblem()">Delete</button>
+    </div>
     <h2 class="text-center">{{ problem?.title }}</h2>
 
     <table class="table table-striped mt-4">
