@@ -5,7 +5,8 @@
         <p class="card-text">Author: {{ problem.author }}</p>
         <p class="card-text">Grade: {{ problem.grade }}</p>
     </div>
-    <div class="card-footer text-muted d-flex justify-content-end">
+    <div class="card-footer text-muted d-flex justify-content-between">
+        <button *ngIf="isAdmin" class="btn btn-secondary" (click)="edit()">Edit</button>
         <button class="btn btn-primary" (click)="solve()">Solve</button>
     </div>
 </div>

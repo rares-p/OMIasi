@@ -4,7 +4,7 @@ import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { RegisterModel } from '../../models/auth/registerModel';
 import { BaseResponse } from '../../models/responses/baseResponse';
 import { catchError, map } from 'rxjs/operators';
-import { firstValueFrom, of } from 'rxjs';
+import { BehaviorSubject, Observable, firstValueFrom, of } from 'rxjs';
 import { LoginModel } from '../../models/auth/loginModel';
 import { BaseServerResponse } from '../../models/responses/baseServerResponse';
 import { JwtPayload, jwtDecode } from 'jwt-decode';
@@ -14,6 +14,7 @@ import { JwtInterface } from './jwt-interface';
     providedIn: 'root',
 })
 export class AuthService {
+    private loggedIn = new BehaviorSubject<boolean>(false);
     private readonly headers: HttpHeaders = new HttpHeaders().set(
         'Content-Type',
         'application/json'
@@ -22,7 +23,10 @@ export class AuthService {
         /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     private apiUrl = `${environment.apiUrl}`;
 
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) {
+        const token = localStorage.getItem('token');
+        this.loggedIn.next(!!token);
+    }
 
     async register(registerModel: RegisterModel): Promise<BaseResponse> {
         console.log(registerModel);
@@ -117,6 +121,7 @@ export class AuthService {
                                 response.body.value
                             ).role;
                             if (role) localStorage.setItem('role', role);
+                            this.loggedIn.next(true);
                             return { success: true, error: null };
                         } else {
                             const errorMessage = response.body!.error;
@@ -134,6 +139,12 @@ export class AuthService {
         );
     }
 
+    logout(): void {
+        localStorage.removeItem('token');
+        localStorage.removeItem('role');
+        this.loggedIn.next(false);
+    }
+
     getUserToken() {
         return localStorage.getItem('token');
     }
@@ -144,5 +155,9 @@ export class AuthService {
 
     isAdmin(): boolean {
         return this.getUserRole() == 'Admin' || this.getUserRole() == 'admin';
+    }
+
+    isUserLoggedIn(): Observable<boolean> {
+        return this.loggedIn.asObservable();
     }
 }

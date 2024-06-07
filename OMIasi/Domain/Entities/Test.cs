@@ -34,4 +34,34 @@ public class Test
 
         return Result<Test>.Success(new Test(problemId, index, input, output, score));
     }
+
+    public Result<Test> UpdateIndex(uint index)
+    {
+        Index = index;
+        return Result<Test>.Success(this);
+    }
+
+    public Result<Test> UpdateInput(byte[] input)
+    {
+        if (input == null! || input.Length == 0)
+            return Result<Test>.Failure("Test Input cannot be empty!");
+        Input = input;
+        return Result<Test>.Success(this);
+    }
+
+    public Result<Test> UpdateOutput(byte[] output)
+    {
+        if (output == null! || output.Length == 0)
+            return Result<Test>.Failure("Test Input cannot be empty!");
+        Output = output;
+        return Result<Test>.Success(this);
+    }
+
+    public Result<Test> UpdateScore(uint score)
+    {
+        if (score == 0)
+            return Result<Test>.Failure("Test score must pe a positive number!");
+        Score = score;
+        return Result<Test>.Success(this);
+    }
 }

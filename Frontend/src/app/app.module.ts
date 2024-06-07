@@ -10,9 +10,10 @@ import { UserModule } from './user/user.module';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { NavbarComponent } from './navbar/navbar.component';
 
 @NgModule({
-    declarations: [AppComponent],
+    declarations: [AppComponent, NavbarComponent],
     imports: [
         BrowserModule,
         HttpClientModule,

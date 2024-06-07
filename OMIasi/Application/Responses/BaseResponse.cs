@@ -4,14 +4,14 @@ public class BaseResponse
 {
     public BaseResponse() => Success = true;
 
-    public BaseResponse(string message, bool success)
+    public BaseResponse(string error, bool success)
     {
         Success = success;
-        Message = message;
+        Error = error;
     }
 
     public bool Success { get; set; }
-    public string Message { get; set; } = string.Empty;
+    public string Error { get; set; } = string.Empty;
 
     public List<string>? ValidationsErrors { get; set; }
 }

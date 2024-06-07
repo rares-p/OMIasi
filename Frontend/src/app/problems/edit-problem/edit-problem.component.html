@@ -1,0 +1,121 @@
+<form [formGroup]="problemForm"> <!--(ngSubmit)="onSubmit()"-->
+    <div>
+        <label for="title">Title <i class="fas fa-heading"></i></label>
+        <input id="title" formControlName="title" />
+        <div *ngIf="isFieldInvalid('title')">
+            Title is required and must start with a capital letter.
+        </div>
+    </div>
+
+    <div>
+        <label for="description">Description <i class="fas fa-align-left"></i></label>
+        <textarea id="description" formControlName="description"></textarea>
+        <div *ngIf="isFieldInvalid('description')">
+            Description is required.
+        </div>
+    </div>
+
+    <div>
+        <label for="year">Year <i class="fas fa-align-left"></i></label>
+        <input id="year" type="number" formControlName="year" />
+        <div *ngIf="isFieldInvalid('year')">
+            Year is required.
+        </div>
+    </div>
+
+    <div>
+        <label for="noTests">Number of Tests <i class="fas fa-list-ol"></i></label>
+        <input id="noTests" type="number" formControlName="noTests" (change)="onNoTestsChanged()" />
+        <div *ngIf="isFieldInvalid('noTests')">
+            Number of Tests must be a positive integer.
+        </div>
+    </div>
+
+    <div>
+        <label for="author">Author <i class="fas fa-user"></i></label>
+        <input id="author" formControlName="author" />
+        <div *ngIf="isFieldInvalid('author')">
+            Author is required.
+        </div>
+    </div>
+
+    <div>
+        <label for="timeLimitInSeconds">Time Limit (seconds) <i class="fas fa-clock"></i></label>
+        <input id="timeLimitInSeconds" type="number" step="0.01" formControlName="timeLimitInSeconds" />
+        <div *ngIf="isFieldInvalid('timeLimitInSeconds')">
+            Time Limit must be a positive number.
+        </div>
+    </div>
+
+    <div>
+        <label for="totalMemoryLimitInMb">Total Memory Limit (MB) <i class="fas fa-memory"></i></label>
+        <input id="totalMemoryLimitInMb" type="number" formControlName="totalMemoryLimitInMb" />
+    </div>
+
+    <div>
+        <label for="stackMemoryLimitInMb">Stack Memory Limit (MB) <i class="fas fa-memory"></i></label>
+        <input id="stackMemoryLimitInMb" type="number" formControlName="stackMemoryLimitInMb" />
+    </div>
+
+    <div>
+        <label for="grade">Grade <i class="fas fa-graduation-cap"></i></label>
+        <input id="grade" type="number" formControlName="grade" />
+        <div *ngIf="isFieldInvalid('grade')">
+            Grade must be between 5 and 12.
+        </div>
+    </div>
+
+    <div>
+        <label for="inputFileName">Input File Name <i class="fas fa-file-alt"></i></label>
+        <input id="inputFileName" formControlName="inputFileName" />
+        <div *ngIf="isFieldInvalid('inputFileName')">
+            Input File Name is required and must be in the format filename.extension.
+        </div>
+    </div>
+
+    <div>
+        <label for="outputFileName">Output File Name <i class="fas fa-file-alt"></i></label>
+        <input id="outputFileName" formControlName="outputFileName" />
+        <div *ngIf="isFieldInvalid('outputFileName')">
+            Output File Name is required and must be in the format filename.extension.
+        </div>
+    </div>
+
+    <div *ngIf="problem && problem.tests">
+        <h3>Tests</h3>
+        <ul>
+            <li *ngFor="let test of problem.tests; let i = index" class="test-item">
+                <div class="test-header">
+                    <div *ngIf="test.id">
+                        <span class="test-label">Test {{ test.index }}</span>
+                        <button type="button" (click)="downloadTestFile(test, 'input')">Download Input</button>
+                        <button type="button" (click)="downloadTestFile(test, 'output')">Download Output</button>
+                    </div>
+                    <div>
+                        <label for="testScore{{i}}">Score</label>
+                        <input class="test-score" id="testScore{{i}}" type="number" [ngModelOptions]="{standalone: true}" [(ngModel)]="test.score" min="0" step="1" />
+                    </div>
+                </div>
+                <div class="file-upload">
+                    <div>
+                        <label for="inputFile{{i}}">Upload Input File</label>
+                        <input type="file" id="inputFile{{i}}" (change)="onFileSelected($event, i, 'input')" />
+                    </div>
+                    <div>
+                        <label for="outputFile{{i}}">Upload Output File</label>
+                        <input type="file" id="outputFile{{i}}" (change)="onFileSelected($event, i, 'output')" />
+                    </div>
+                </div>
+                <div>
+                    <button class="icon-button" type="button" (click)="adjustFileIndex(i, 'up')" [disabled]="i === 0"><i class="fas fa-arrow-up"></i></button>
+                    <button class="icon-button" type="button" (click)="adjustFileIndex(i, 'down')" [disabled]="i === this.problem.noTests - 1"><i class="fas fa-arrow-down"></i></button>
+                    <button class="icon-button" type="button"><i class="fas fa-times"></i></button>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div>
+        <button class="btn btn-secondary" (click)="updateProblem()">Update Problem</button>
+    </div>
+</form>

@@ -6,6 +6,8 @@ import { Problem } from '../../models/problems/problem';
 import { CreateProblem } from '../../models/problems/createProblem';
 import { BaseResponse } from '../../models/responses/baseResponse';
 import { BaseServerResponse } from '../../models/responses/baseServerResponse';
+import { ProblemFull } from '../../models/problems/problemFull';
+import { ArrayUtilsService } from '../array-utils/array-utils.service';
 
 @Injectable({
     providedIn: 'root',
@@ -13,14 +15,22 @@ import { BaseServerResponse } from '../../models/responses/baseServerResponse';
 export class ProblemService {
     private apiUrl = `${environment.apiUrl}/problems`; // Replace with your API endpoint
 
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient, private utils: ArrayUtilsService) {}
 
     getAllProblems(): Observable<Problem[]> {
         return this.http.get<Problem[]>(this.apiUrl);
     }
 
-    getProblemById(id: string): Observable<Problem> {
-        return this.http.get<Problem>(`${this.apiUrl}/${id}`);
+    async getProblemById(id: string): Promise<Problem> {
+        return await firstValueFrom(
+            this.http.get<Problem>(`${this.apiUrl}/${id}`)
+        );
+    }
+
+    async getFullProblemById(id: string): Promise<ProblemFull> {
+        return await firstValueFrom(
+            this.http.get<ProblemFull>(`${this.apiUrl}/admin/${id}`)
+        );
     }
 
     getProblemByTitle(title: string): Observable<Problem> {
@@ -75,5 +85,30 @@ export class ProblemService {
                     })
                 )
         );
+    }
+
+    async updateProblem(problem: ProblemFull): Promise<Problem> {
+        const problemToSend = {
+            ...problem,
+            tests: problem.tests.map((test) => ({
+                ...test,
+                input: this.utils.arrayBufferToBase64(test.input),
+                output: this.utils.arrayBufferToBase64(test.output),
+            })),
+        };
+        return await firstValueFrom(
+            this.http.put<any>(`${this.apiUrl}`, problemToSend)
+        );
+    }
+
+    async readFileToBytesArray(file: File): Promise<string> {
+        const arrayBuffer = await file.arrayBuffer();
+        const int8Array = new Int8Array(arrayBuffer);
+
+        const binaryString = Array.from(int8Array)
+            .map((byte) => byte.toString(2).padStart(8, '0'))
+            .join(' ');
+
+        return binaryString;
     }
 }

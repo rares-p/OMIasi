@@ -22,7 +22,7 @@ export class ProblemComponent implements OnInit, AfterViewInit {
         private authService: AuthService
     ) {}
 
-    ngOnInit(): void {
+    async ngOnInit(): Promise<void> {
         const navigation = this.router.getCurrentNavigation();
         console.log('Navigation state:', navigation?.extras.state);
 
@@ -31,11 +31,7 @@ export class ProblemComponent implements OnInit, AfterViewInit {
         } else {
             const problemId = this.route.snapshot.paramMap.get('id') ?? '';
             if (problemId) {
-                this.problemService
-                    .getProblemById(problemId)
-                    .subscribe((data: Problem) => {
-                        this.problem = data;
-                    });
+                this.problem = await this.problemService.getProblemById(problemId);
             }
         }
     }

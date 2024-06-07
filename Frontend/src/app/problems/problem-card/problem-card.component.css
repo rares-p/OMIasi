@@ -40,13 +40,12 @@
     position: relative;
     padding: 10px;
     display: flex;
-    justify-content: flex-end;
-  }
-  
-  .card-footer button {
+    justify-content: space-between; /* Change from justify-content-end to space-between */
+}
+
+.card-footer button {
+    position: relative;
+    bottom: 0;
+    right: 0;
     margin-right: 10px;
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-  }
-  
+}

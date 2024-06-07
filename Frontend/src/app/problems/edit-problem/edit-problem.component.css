@@ -22,19 +22,23 @@ label {
     color: #333;
 }
 
-input, textarea, button {
+input,
+textarea,
+button {
     padding: 0.5rem;
     font-size: 0.9rem;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
 
-input, textarea {
+input,
+textarea {
     background-color: #fff;
     transition: border-color 0.2s;
 }
 
-input:focus, textarea:focus {
+input:focus,
+textarea:focus {
     border-color: #007bff;
     outline: none;
 }
@@ -106,7 +110,7 @@ li button {
 }
 
 .file-upload div {
-    color: red;
+    /* color: red; */
     font-size: 0.8rem;
     margin-top: 0.5rem;
     display: block;
@@ -130,4 +134,96 @@ li button {
     margin-left: 5px;
     padding: 0.3rem;
     font-size: 0.8rem;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="file"] {
+    display: block;
+    margin-top: 5px;
+}
+
+button {
+    margin-right: 10px;
+    margin-top: 10px;
+}
+
+.btn-secondary {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+}
+.test-item {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.test-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.test-label {
+    margin-right: 10px;
+}
+
+button {
+    margin-right: 10px;
+}
+
+.file-upload {
+    display: flex;
+    flex-direction: column;
+}
+
+.file-upload > div {
+    margin-bottom: 10px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="file"] {
+    display: block;
+    margin-top: 5px;
+}
+
+.btn-secondary {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+}
+
+span {
+    color: #333;
+}
+
+.test-score {
+    width: 100px;
+}
+
+.icon-button {
+    width: 30px;
 }
