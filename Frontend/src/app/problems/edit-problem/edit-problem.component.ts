@@ -1,10 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProblemService } from '../../services/problems/problem.service';
-import { FormBuilder, FormGroup, Validators, FormsModule } from '@angular/forms';
+import {
+    FormBuilder,
+    FormGroup,
+    Validators,
+    FormsModule,
+} from '@angular/forms';
 import { ProblemFull } from '../../models/problems/problemFull';
 import { TestFull } from '../../models/problems/testFull';
 import { saveAs } from 'file-saver';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'app-edit-problem',
@@ -19,7 +25,8 @@ export class EditProblemComponent implements OnInit {
         private fb: FormBuilder,
         private router: Router,
         private route: ActivatedRoute,
-        private problemService: ProblemService
+        private problemService: ProblemService,
+        private toastr: ToastrService
     ) {
         this.problemForm = this.fb.group({
             title: ['', [Validators.required, Validators.pattern(/^[A-Z].*$/)]],
@@ -110,7 +117,19 @@ export class EditProblemComponent implements OnInit {
 
     async updateProblem() {
         // this.problem = { ...this.problem, ...this.problemForm.value };
-        await this.problemService.updateProblem(this.problem);
+        let updateResult = await this.problemService.updateProblem(
+            this.problem
+        );
+        if (updateResult.success) {
+            this.toastr.success('Problem update sucessfully!');
+            this.problem = await this.problemService.getFullProblemById(
+                this.problem.id
+            );
+        } else
+            this.toastr.error(
+                updateResult.error ??
+                    'Unknown error encoutered. Please try again later'
+            );
     }
 
     downloadTestFile(test: TestFull, type: 'input' | 'output') {
@@ -160,7 +179,8 @@ export class EditProblemComponent implements OnInit {
                 output: new Uint8Array(),
                 score: 0,
             });
-        console.log(this.problem)
+        else this.problem.tests.pop();
+        console.log(this.problem);
     }
 
     adjustFileIndex(index: number, direction: 'up' | 'down') {
@@ -173,6 +193,6 @@ export class EditProblemComponent implements OnInit {
         const temp = this.problem.tests[newIndex];
         this.problem.tests[newIndex] = this.problem.tests[index];
         this.problem.tests[index] = temp;
-        console.log(this.problem)
+        console.log(this.problem);
     }
 }

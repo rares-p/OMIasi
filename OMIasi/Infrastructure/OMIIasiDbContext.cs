@@ -9,9 +9,22 @@ public class OMIIasiDbContext(DbContextOptions<OMIIasiDbContext> options) : DbCo
     public required DbSet<Problem> Problems { get; init; }
     public required DbSet<Test> Tests { get; init; }
     public required DbSet<Submission> Submissions { get; init; }
+    public required DbSet<SubmissionTestResult> SubmissionResults { get; init; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Submission>(entity =>
+        {
+            entity.OwnsMany(e => e.Scores, sa =>
+            {
+                sa.WithOwner().HasForeignKey("SubmissionId");
+                sa.Property<Guid>("Id");
+                sa.HasKey("Id");
+                sa.Property(s => s.Message).HasColumnName("Message");
+                sa.Property(s => s.Score).HasColumnName("Score");
+            });
+        });
+
         modelBuilder.HasDefaultSchema("omiiasi");
     }
 }

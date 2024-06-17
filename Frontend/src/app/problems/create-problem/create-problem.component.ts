@@ -136,6 +136,7 @@ export class CreateProblemComponent {
             let problemCreateResponse = await this.problemService.createProblem(
                 createdProblem
             );
+            console.log(problemCreateResponse)
             if (problemCreateResponse.success) {
                 this.toastr.success('Problem created sucessfully');
                 this.router.navigate(["problems", createdProblem.title]);

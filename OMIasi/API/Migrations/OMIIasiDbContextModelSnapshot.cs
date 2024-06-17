@@ -184,6 +184,42 @@ namespace API.Migrations
 
                     b.ToTable("Users", "omiiasi");
                 });
+
+            modelBuilder.Entity("Domain.Entities.Submission", b =>
+                {
+                    b.OwnsMany("Domain.Entities.SubmissionTestResult", "Scores", b1 =>
+                        {
+                            b1.Property<Guid>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Message")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("Message");
+
+                            b1.Property<long>("Runtime")
+                                .HasColumnType("bigint");
+
+                            b1.Property<long>("Score")
+                                .HasColumnType("bigint")
+                                .HasColumnName("Score");
+
+                            b1.Property<Guid>("SubmissionId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.HasKey("Id");
+
+                            b1.HasIndex("SubmissionId");
+
+                            b1.ToTable("SubmissionResults", "omiiasi");
+
+                            b1.WithOwner()
+                                .HasForeignKey("SubmissionId");
+                        });
+
+                    b.Navigation("Scores");
+                });
 #pragma warning restore 612, 618
         }
     }

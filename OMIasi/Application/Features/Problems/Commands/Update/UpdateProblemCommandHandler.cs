@@ -25,6 +25,13 @@ public class UpdateProblemCommandHandler(IProblemRepository problemRepository, I
                 Error = testsResult.Error
             };
 
+        if (request.Tests.Sum(test => test.Score) != 100)
+            return new UpdateProblemCommandResponse()
+            {
+                Success = false,
+                Error = "Scores must add up to 100"
+            };
+
         foreach (var test in request.Tests.Where(test => test.Id != null))
         {
             var testResult = await testRepository.FindByIdAsync((Guid)test.Id!);
@@ -61,7 +68,7 @@ public class UpdateProblemCommandHandler(IProblemRepository problemRepository, I
             if (test.Id != null)
             {
                 var testResult = await testRepository.FindByIdAsync((Guid)test.Id);
-                var updateTestResult = UpdateTest(testResult, request.Tests.First(t => t.Index == testResult.Value.Index));
+                var updateTestResult = UpdateTest(testResult, request.Tests.First(t => t.Id == testResult.Value.Id));
                 if (!updateTestResult.IsSuccess)
                     return new UpdateProblemCommandResponse()
                     {

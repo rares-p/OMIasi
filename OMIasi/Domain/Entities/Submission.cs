@@ -4,7 +4,11 @@ namespace Domain.Entities;
 
 public class Submission
 {
-    private Submission(Guid userId, Guid problemId, string solution, uint score, DateTime date)
+    private Submission()
+    {
+    }
+
+    private Submission(Guid userId, Guid problemId, string solution, uint score, DateTime date, List<SubmissionTestResult> scores)
     {
         Id = Guid.NewGuid();
         UserId = userId;
@@ -12,6 +16,7 @@ public class Submission
         Solution = solution;
         Score = score;
         Date = date;
+        Scores = [..scores];
     }
 
     public Guid Id { get; private set; }
@@ -20,8 +25,9 @@ public class Submission
     public uint Score { get; private set; }
     public DateTime Date { get; private set; }
     public string Solution { get; private set; }
+    public List<SubmissionTestResult> Scores { get; private set; }
 
-    public static Result<Submission> Create(Guid userId, Guid problemId, string solution,uint score, DateTime date)
+    public static Result<Submission> Create(Guid userId, Guid problemId, string solution, uint score, DateTime date, List<(string message, uint score, uint runtime)> scores)
     {
         if(userId == null)
             return Result<Submission>.Failure("User Id cannot be null!");
@@ -38,6 +44,14 @@ public class Submission
         if (date == null)
             return Result<Submission>.Failure("Submission date cannot be null!");
 
-        return Result<Submission>.Success(new Submission(userId, problemId, solution, score, date));
+        var testResults = new List<SubmissionTestResult>();
+        foreach (var testResult in scores.Select(s => SubmissionTestResult.Create(s.message, s.score, s.runtime)))
+        {
+            if(!testResult.IsSuccess)
+                return Result<Submission>.Failure(testResult.Error);
+            testResults.Add(testResult.Value);
+        }
+
+        return Result<Submission>.Success(new Submission(userId, problemId, solution, score, date, testResults));
     }
 }

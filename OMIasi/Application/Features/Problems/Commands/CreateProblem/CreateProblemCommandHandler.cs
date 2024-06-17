@@ -15,14 +15,14 @@ public class CreateProblemCommandHandler(IProblemRepository problemRepository, I
             return new CreateProblemCommandResponse()
             {
                 Success = false,
-                ValidationsErrors = validatorResult.Errors.Select(x => x.ErrorMessage).ToList()
+                Error = string.Join('\n', validatorResult.Errors.Select(x => x.ErrorMessage).ToList())
             };
 
         if (await problemRepository.ExistsAsync(request.Title))
             return new CreateProblemCommandResponse()
             {
                 Success = false,
-                ValidationsErrors = [$"Problem with Title {request.Title} already exists!"]
+                Error = $"Problem with Title {request.Title} already exists!"
             };
 
         var problem = Problem.Create(request.Title, request.Description, request.NoTests, request.Author,
@@ -33,7 +33,7 @@ public class CreateProblemCommandHandler(IProblemRepository problemRepository, I
             return new CreateProblemCommandResponse()
             {
                 Success = false,
-                ValidationsErrors = [problem.Error]
+                Error = problem.Error
             };
 
         var tests = request.Tests.Select(test => Test.Create(problem.Value.Id, test.Index, test.Input, test.Output, test.Score)).ToList();
@@ -42,7 +42,7 @@ public class CreateProblemCommandHandler(IProblemRepository problemRepository, I
             return new CreateProblemCommandResponse()
             {
                 Success = false,
-                ValidationsErrors = tests.Select(test => test.Error).ToList()
+                Error = string.Join('\n', tests.Select(test => test.Error).ToList())
             };
 
         try
@@ -55,7 +55,7 @@ public class CreateProblemCommandHandler(IProblemRepository problemRepository, I
             return new CreateProblemCommandResponse()
             {
                 Success = false,
-                ValidationsErrors = ["Internal Server Error"]
+                Error = "Internal Server Error"
             };
         }
 

@@ -1,4 +1,4 @@
-﻿using Domain;
+﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure;
@@ -6,6 +6,7 @@ namespace Infrastructure;
 public class OMIIasiDbContext(DbContextOptions<OMIIasiDbContext> options) : DbContext(options)
 {
     public required DbSet<Test> Tests { get; init; }
+    public required DbSet<Problem> Problems { get; init; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

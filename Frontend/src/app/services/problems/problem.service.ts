@@ -13,7 +13,7 @@ import { ArrayUtilsService } from '../array-utils/array-utils.service';
     providedIn: 'root',
 })
 export class ProblemService {
-    private apiUrl = `${environment.apiUrl}/problems`; // Replace with your API endpoint
+    private apiUrl = `${environment.apiUrl}/problems`;
 
     constructor(private http: HttpClient, private utils: ArrayUtilsService) {}
 
@@ -41,7 +41,7 @@ export class ProblemService {
         console.log(`Posting problem at${this.apiUrl}`, createProblem);
         return await firstValueFrom(
             this.http
-                .post(this.apiUrl, createProblem, {
+                .post<BaseResponse>(this.apiUrl, createProblem, {
                     observe: 'response',
                 })
                 .pipe(
@@ -50,10 +50,10 @@ export class ProblemService {
                         error: null,
                     })),
                     catchError(async (error) => {
-                        console.error('Error during problem creation:', error);
+                        console.error('Error during problem creation:', error.error.error);
                         return {
                             success: false,
-                            error: error,
+                            error: error.error.error,
                         };
                     })
                 )
@@ -87,7 +87,7 @@ export class ProblemService {
         );
     }
 
-    async updateProblem(problem: ProblemFull): Promise<Problem> {
+    async updateProblem(problem: ProblemFull): Promise<BaseResponse> {
         const problemToSend = {
             ...problem,
             tests: problem.tests.map((test) => ({
@@ -96,9 +96,11 @@ export class ProblemService {
                 output: this.utils.arrayBufferToBase64(test.output),
             })),
         };
-        return await firstValueFrom(
-            this.http.put<any>(`${this.apiUrl}`, problemToSend)
+        let resp = await firstValueFrom(
+            this.http.put<BaseResponse>(`${this.apiUrl}`, problemToSend)
         );
+        console.log(resp)
+        return resp;
     }
 
     async readFileToBytesArray(file: File): Promise<string> {

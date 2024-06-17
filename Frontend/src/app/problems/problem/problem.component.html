@@ -1,10 +1,14 @@
 <div class="container mt-5">
     <div *ngIf="isAdmin" class="buttons-container position-absolute top-0 end-0">
-        <button id="editButton" class="btn btn-primary me-2">Edit</button>
+        <button id="editButton" class="btn btn-primary me-2" (click)="edit()">Edit</button>
         <button id="deleteButton" class="btn btn-danger" (click)="deleteProblem()">Delete</button>
     </div>
     <h2 class="text-center">{{ problem?.title }}</h2>
-
+    <div *ngIf="isLoggedIn">
+        <div *ngFor="let submission of submissions">
+            <app-submission-card [score]="getSubmssionScore(submission)" [date]="submission.date"></app-submission-card>
+        </div>
+    </div>
     <table class="table table-striped mt-4">
         <tbody>
             <tr>
@@ -49,6 +53,16 @@
 
     <div class="mb-4">
         <h5>Write your solution:</h5>
-        <textarea id="code-editor" class="form-control" rows="10"></textarea>
+        <textarea id="code-editor" class="form-control" rows="10" [(ngModel)]="solution"></textarea>
     </div>
+
+    <div class="text-end mb-4" *ngIf="isLoggedIn">
+        <button id="submitButton" class="btn btn-success" (click)="submitSolution()">Submit Solution</button>
+    </div>
+
+    <!-- <ngx-codemirror [(ngModel)]="content" [options]="{
+    lineNumbers: true,
+    theme: 'material',
+    mode: 'markdown'
+  }"></ngx-codemirror> -->
 </div>

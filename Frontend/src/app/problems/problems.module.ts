@@ -6,20 +6,23 @@ import { ProblemComponent } from './problem/problem.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CreateProblemComponent } from './create-problem/create-problem.component';
 import { EditProblemComponent } from './edit-problem/edit-problem.component';
-
+import { CodemirrorModule } from '@ctrl/ngx-codemirror';
+import { SubmissionCardComponent } from "../submissions/submission-card/submission-card.component";
 
 @NgModule({
-  declarations: [
-    AllProblemsComponent,
-    ProblemCardComponent,
-    ProblemComponent,
-    CreateProblemComponent,
-    EditProblemComponent
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule
-  ]
+    declarations: [
+        AllProblemsComponent,
+        ProblemCardComponent,
+        ProblemComponent,
+        CreateProblemComponent,
+        EditProblemComponent
+    ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        CodemirrorModule,
+        SubmissionCardComponent
+    ]
 })
 export class ProblemsModule { }

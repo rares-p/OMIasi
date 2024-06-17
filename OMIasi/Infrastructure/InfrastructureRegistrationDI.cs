@@ -1,9 +1,11 @@
 ﻿using System.Text;
+using Application.Contracts;
 using Application.Contracts.Identity;
 using Application.Contracts.Repositories;
 using Domain.Entities;
 using Infrastructure.Repositories;
 using Infrastructure.Services;
+using Infrastructure.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -56,6 +58,9 @@ public static class InfrastructureRegistrationDi
             });
 
         services.AddScoped<IAuthService, AuthService>();
+
+        services.Configure<EvaluationServiceSettings>(configuration.GetSection("EvaluationService"));
+        services.AddHttpClient<IEvaluationService, EvaluationService>();
 
         return services;
     }
