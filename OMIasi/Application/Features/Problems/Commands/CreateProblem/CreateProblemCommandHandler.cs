@@ -55,7 +55,7 @@ public class CreateProblemCommandHandler(IProblemRepository problemRepository, I
             return new CreateProblemCommandResponse()
             {
                 Success = false,
-                Error = "Internal Server Error"
+                Error = "Server Error"
             };
         }
 

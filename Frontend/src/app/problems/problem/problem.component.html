@@ -51,15 +51,16 @@
         </div>
     </div>
 
-    <div class="mb-4">
-        <h5>Write your solution:</h5>
-        <textarea id="code-editor" class="form-control" rows="10" [(ngModel)]="solution"></textarea>
-    </div>
+    <div *ngIf="isLoggedIn">
+        <div class="mb-4">
+            <h5>Write your solution:</h5>
+            <textarea id="code-editor" class="form-control" rows="10" [(ngModel)]="solution"></textarea>
+        </div>
 
-    <div class="text-end mb-4" *ngIf="isLoggedIn">
-        <button id="submitButton" class="btn btn-success" (click)="submitSolution()">Submit Solution</button>
+        <div class="text-end mb-4">
+            <button id="submitButton" class="btn btn-success" (click)="submitSolution()">Submit Solution</button>
+        </div>
     </div>
-
     <!-- <ngx-codemirror [(ngModel)]="content" [options]="{
     lineNumbers: true,
     theme: 'material',
