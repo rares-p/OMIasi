@@ -142,7 +142,7 @@ public class EvaluationService(IProblemRepository problemRepository, ITestReposi
             try
             {
                 using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(problem.TimeLimitInSeconds));
-                await Task.Run(() => runProcess.WaitForExit(), cts.Token);
+                await Task.Run(runProcess.WaitForExit, cts.Token);
             }
             catch (OperationCanceledException)
             {
