@@ -27,7 +27,7 @@ public class Submission
     public string Solution { get; private set; }
     public List<SubmissionTestResult> Scores { get; private set; }
 
-    public static Result<Submission> Create(Guid userId, Guid problemId, string solution, uint score, DateTime date, List<(string message, uint score, uint runtime)> scores)
+    public static Result<Submission> Create(Guid userId, Guid problemId, string solution, uint score, DateTime date, List<(string message, uint score, uint runtime, uint testIndex)> scores)
     {
         if(userId == null)
             return Result<Submission>.Failure("User Id cannot be null!");
@@ -45,7 +45,7 @@ public class Submission
             return Result<Submission>.Failure("Submission date cannot be null!");
 
         var testResults = new List<SubmissionTestResult>();
-        foreach (var testResult in scores.Select(s => SubmissionTestResult.Create(s.message, s.score, s.runtime)))
+        foreach (var testResult in scores.Select(s => SubmissionTestResult.Create(s.message, s.score, s.runtime, s.testIndex)))
         {
             if(!testResult.IsSuccess)
                 return Result<Submission>.Failure(testResult.Error);

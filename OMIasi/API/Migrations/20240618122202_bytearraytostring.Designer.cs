@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(OMIIasiDbContext))]
-    [Migration("20240525091032_initial")]
-    partial class initial
+    [Migration("20240618122202_bytearraytostring")]
+    partial class bytearraytostring
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -123,13 +123,13 @@ namespace API.Migrations
                     b.Property<long>("Index")
                         .HasColumnType("bigint");
 
-                    b.Property<byte[]>("Input")
+                    b.Property<string>("Input")
                         .IsRequired()
-                        .HasColumnType("varbinary(max)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("Output")
+                    b.Property<string>("Output")
                         .IsRequired()
-                        .HasColumnType("varbinary(max)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("ProblemId")
                         .HasColumnType("uniqueidentifier");
@@ -186,6 +186,42 @@ namespace API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users", "omiiasi");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Submission", b =>
+                {
+                    b.OwnsMany("Domain.Entities.SubmissionTestResult", "Scores", b1 =>
+                        {
+                            b1.Property<Guid>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Message")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("Message");
+
+                            b1.Property<long>("Runtime")
+                                .HasColumnType("bigint");
+
+                            b1.Property<long>("Score")
+                                .HasColumnType("bigint")
+                                .HasColumnName("Score");
+
+                            b1.Property<Guid>("SubmissionId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.HasKey("Id");
+
+                            b1.HasIndex("SubmissionId");
+
+                            b1.ToTable("SubmissionResults", "omiiasi");
+
+                            b1.WithOwner()
+                                .HasForeignKey("SubmissionId");
+                        });
+
+                    b.Navigation("Scores");
                 });
 #pragma warning restore 612, 618
         }

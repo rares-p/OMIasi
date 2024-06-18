@@ -107,10 +107,10 @@ export class CreateProblemComponent {
             for (let index = 0; index < this.inputFiles.length; index++) {
                 tests.push({
                     index: index,
-                    input: await this.readFileToBytesArray(
+                    input: await this.readFileAsString(
                         this.inputFiles[index].file
                     ),
-                    output: await this.readFileToBytesArray(
+                    output: await this.readFileAsString(
                         this.outputFiles[index].file
                     ),
                     score: this.inputFiles[index].score,
@@ -171,5 +171,16 @@ export class CreateProblemComponent {
             .join(' ');
 
         return binaryString;
+    }
+
+    async readFileAsString(file: File): Promise<string> {
+        return await new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => {
+                resolve(reader.result as string);
+            };
+            reader.onerror = reject;
+            reader.readAsText(file);
+        });
     }
 }

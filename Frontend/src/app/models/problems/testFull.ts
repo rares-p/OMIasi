@@ -1,7 +1,7 @@
 export type TestFull = {
     id: string,
     index: number,
-    input: Uint8Array,
-    output: Uint8Array,
+    input: string,
+    output: string,
     score: number
 }

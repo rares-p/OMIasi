@@ -16,9 +16,9 @@ export class SubmissionsService {
     constructor(private http: HttpClient) {}
 
     async getAllSubmissions(problemId: string): Promise<SubmissionResponse> {
-        return await firstValueFrom(
-            this.http.get<SubmissionResponse>(`${this.apiUrl}/${problemId}`)
-        );
+        var response = await firstValueFrom(this.http.get<SubmissionResponse>(`${this.apiUrl}/${problemId}`))
+        response.submissions.sort((a, b) => a.date > b.date ? -1 : 1)
+        return response
     }
 
     async createSubmission(

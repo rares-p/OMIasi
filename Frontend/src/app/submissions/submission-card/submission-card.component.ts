@@ -1,26 +1,47 @@
 import { CommonModule, NgStyle } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { SubmissionModel } from '../../models/submissions/submissionModel';
 
 @Component({
     selector: 'app-submission-card',
     standalone: true,
     imports: [NgStyle, CommonModule],
     templateUrl: './submission-card.component.html',
-    styleUrl: './submission-card.component.css',
+    styleUrls: ['./submission-card.component.css'],
 })
-export class SubmissionCardComponent {
-    @Input() score!: number;
-    @Input() date!: Date;
+export class SubmissionCardComponent implements AfterViewInit {
+    constructor(private cdr: ChangeDetectorRef) {}
+    ngAfterViewInit(): void {
+        this.score = this.getSubmssionScore(this.submission)
+        this.cdr.detectChanges();
+    }
+    @Input() submission!: SubmissionModel;
+    score: number = 0;
+    isPopupVisible: boolean = false;
 
     getBackgroundColor(): string {
         if (this.score === 100) {
-            return 'green';
+            return '#81C784';
         } else if (this.score === 0) {
-            return 'red';
+            return '#E57373';
         } else if (this.score < 50) {
-            return 'yellow';
+            return '#FFB74D';
+        } else if (this.score < 90) {
+            return '#FFF176';
         } else {
-            return 'lightgreen';
+            return '#DCE775';
         }
+    }
+
+    openDetails(): void {
+        this.isPopupVisible = true;
+    }
+
+    closeDetails(): void {
+        this.isPopupVisible = false;
+    }
+
+    getSubmssionScore(submission: SubmissionModel): number {
+        return submission.scores.reduce((sum, submission) => sum + submission.score, 0);
     }
 }

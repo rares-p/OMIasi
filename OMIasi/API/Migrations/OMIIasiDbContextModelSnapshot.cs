@@ -120,13 +120,13 @@ namespace API.Migrations
                     b.Property<long>("Index")
                         .HasColumnType("bigint");
 
-                    b.Property<byte[]>("Input")
+                    b.Property<string>("Input")
                         .IsRequired()
-                        .HasColumnType("varbinary(max)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("Output")
+                    b.Property<string>("Output")
                         .IsRequired()
-                        .HasColumnType("varbinary(max)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("ProblemId")
                         .HasColumnType("uniqueidentifier");
@@ -207,6 +207,9 @@ namespace API.Migrations
 
                             b1.Property<Guid>("SubmissionId")
                                 .HasColumnType("uniqueidentifier");
+
+                            b1.Property<long>("TestIndex")
+                                .HasColumnType("bigint");
 
                             b1.HasKey("Id");
 

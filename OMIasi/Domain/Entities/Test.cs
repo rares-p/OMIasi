@@ -7,11 +7,11 @@ public class Test
     public Guid Id { get; private set; }
     public Guid ProblemId { get; private set; }
     public uint Index { get; private set; }
-    public byte[] Input { get; private set; }
-    public byte[] Output { get; private set; }
+    public string Input { get; private set; }
+    public string Output { get; private set; }
     public uint Score { get; private set; }
 
-    private Test(Guid problemId, uint index, byte[] input, byte[] output, uint score)
+    private Test(Guid problemId, uint index, string input, string output, uint score)
     {
         Id = Guid.NewGuid();
         ProblemId = problemId;
@@ -21,12 +21,12 @@ public class Test
         Score = score;
     }
 
-    public static Result<Test> Create(Guid problemId, uint index, byte[] input, byte[] output, uint score)
+    public static Result<Test> Create(Guid problemId, uint index, string input, string output, uint score)
     {
-        if (input == null! || input.Length == 0)
+        if (string.IsNullOrWhiteSpace(input))
             return Result<Test>.Failure("Test Input cannot be empty!");
 
-        if(output == null! || output.Length == 0)
+        if (string.IsNullOrWhiteSpace(output))
             return Result<Test>.Failure("Test Input cannot be empty!");
 
         if(score == 0)
@@ -41,17 +41,17 @@ public class Test
         return Result<Test>.Success(this);
     }
 
-    public Result<Test> UpdateInput(byte[] input)
+    public Result<Test> UpdateInput(string input)
     {
-        if (input == null! || input.Length == 0)
+        if (string.IsNullOrWhiteSpace(input))
             return Result<Test>.Failure("Test Input cannot be empty!");
         Input = input;
         return Result<Test>.Success(this);
     }
 
-    public Result<Test> UpdateOutput(byte[] output)
+    public Result<Test> UpdateOutput(string output)
     {
-        if (output == null! || output.Length == 0)
+        if (string.IsNullOrWhiteSpace(output))
             return Result<Test>.Failure("Test Input cannot be empty!");
         Output = output;
         return Result<Test>.Success(this);

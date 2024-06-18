@@ -23,8 +23,9 @@ using namespace std;
 int main()
 {
     return 0;
-}`
-    isLoggedIn: boolean = false
+}`;
+    isLoggedIn: boolean = false;
+    displayAllSubmissions: boolean = false;
 
     constructor(
         private problemService: ProblemService,
@@ -51,9 +52,12 @@ int main()
                 this.problem = await this.problemService.getProblemById(
                     problemId
                 );
-                let submissionsResponse = await this.submissionService.getAllSubmissions(this.problem.id)
-                console.log(submissionsResponse)
-                this.submissions = submissionsResponse.submissions
+                let submissionsResponse =
+                    await this.submissionService.getAllSubmissions(
+                        this.problem.id
+                    );
+                console.log(submissionsResponse);
+                this.submissions = submissionsResponse.submissions;
             }
         }
     }
@@ -83,20 +87,28 @@ int main()
     async submitSolution() {
         await this.submissionService.createSubmission({
             problemId: this.problem!.id,
-            solution: this.solution
-        })
-        let submissionsResponse = await this.submissionService.getAllSubmissions(this.problem!.id)
-        console.log(submissionsResponse)
-        this.submissions = submissionsResponse.submissions
-    }
-
-    getSubmssionScore(submission: SubmissionModel): number {
-        return submission.scores.reduce((sum, submission) => sum + submission.score, 0);
+            solution: this.solution,
+        });
+        let submissionsResponse =
+            await this.submissionService.getAllSubmissions(this.problem!.id);
+        console.log(submissionsResponse);
+        this.submissions = submissionsResponse.submissions;
     }
 
     edit() {
         this.router.navigate([`editProblem/${this.problem!.id}`], {
             state: { problem: this.problem },
         });
+    }
+
+    viewAllSubmissions() {
+        this.displayAllSubmissions = !this.displayAllSubmissions
+    }
+
+    displayedSubmissions(): SubmissionModel[] {
+        if (!this.submissions) return [];
+        return this.displayAllSubmissions
+            ? this.submissions
+            : this.submissions.slice(0, 3);
     }
 }

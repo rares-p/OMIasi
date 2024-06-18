@@ -82,12 +82,8 @@ export class EditProblemComponent implements OnInit {
         if (this.problem) {
             await this.problem.tests.sort((a, b) => a.index - b.index);
             await this.problem.tests.forEach((test) => {
-                test.input = this.binaryStringToByteArray(
-                    test.input.toString()
-                );
-                test.output = this.binaryStringToByteArray(
-                    test.output.toString()
-                );
+                test.input = test.input.toString()
+                test.output = test.output.toString()
             });
             console.log(this.problem.tests);
             this.problemForm.patchValue(this.problem);
@@ -133,7 +129,7 @@ export class EditProblemComponent implements OnInit {
     }
 
     downloadTestFile(test: TestFull, type: 'input' | 'output') {
-        let data = new TextDecoder().decode(test[type]);
+        let data = test[type];
         let fileName =
             this.problem.inputFileName.split('.')[0] +
             '-' +
@@ -149,7 +145,7 @@ export class EditProblemComponent implements OnInit {
     ) {
         const file = event.target.files[0];
         if (file) {
-            const fileContent = await this.readFileAsByteArray(file);
+            const fileContent = await this.readFileAsString(file);
             if (type === 'input') {
                 this.problem.tests[testIndex].input = fileContent;
             } else {
@@ -158,15 +154,14 @@ export class EditProblemComponent implements OnInit {
         }
     }
 
-    readFileAsByteArray(file: File): Promise<Uint8Array> {
-        return new Promise((resolve, reject) => {
+    async readFileAsString(file: File): Promise<string> {
+        return await new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.onload = () => {
-                const result = reader.result as ArrayBuffer;
-                resolve(new Uint8Array(result));
+                resolve(reader.result as string);
             };
             reader.onerror = reject;
-            reader.readAsArrayBuffer(file);
+            reader.readAsText(file);
         });
     }
 
@@ -175,8 +170,8 @@ export class EditProblemComponent implements OnInit {
             this.problem.tests.push({
                 id: null!,
                 index: this.problem.noTests - 1,
-                input: new Uint8Array(),
-                output: new Uint8Array(),
+                input: "",
+                output: "",
                 score: 0,
             });
         else this.problem.tests.pop();

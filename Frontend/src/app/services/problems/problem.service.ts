@@ -92,8 +92,8 @@ export class ProblemService {
             ...problem,
             tests: problem.tests.map((test) => ({
                 ...test,
-                input: this.utils.arrayBufferToBase64(test.input),
-                output: this.utils.arrayBufferToBase64(test.output),
+                input: test.input.trim(),
+                output: test.output.trim(),
             })),
         };
         let resp = await firstValueFrom(

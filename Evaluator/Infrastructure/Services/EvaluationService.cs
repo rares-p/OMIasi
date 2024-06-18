@@ -115,17 +115,19 @@ public class EvaluationService(IProblemRepository problemRepository, ITestReposi
                 {
                     Message = compileOutput,
                     Runtime = 0,
-                    Score = 0
+                    Score = 0,
+                    TestIndex = test.Index
                 };
             }
 
-            await File.WriteAllBytesAsync(Path.Join(evaluationDirectory.FullName, problem.InputFileName), test.Input);
+            await File.WriteAllTextAsync(Path.Join(evaluationDirectory.FullName, problem.InputFileName), test.Input);
 
             var runProcess = new Process
             {
                 StartInfo = new ProcessStartInfo
                 {
                     FileName = Path.Join(evaluationDirectory.FullName, "solution.exe"),
+                    WorkingDirectory = evaluationDirectory.FullName,
                     RedirectStandardInput = true,
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
@@ -135,26 +137,45 @@ public class EvaluationService(IProblemRepository problemRepository, ITestReposi
             };
 
             runProcess.Start();
+            var stopwatch = Stopwatch.StartNew();
 
-            await runProcess.WaitForExitAsync();
-            var solutionContent = (await File.ReadAllBytesAsync(Path.Combine(evaluationDirectory.Name, problem.OutputFileName)))
-                .ToString()?.TrimEnd();
-            var testOutput = test.Output.ToString()?.TrimEnd();
+            try
+            {
+                using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(problem.TimeLimitInSeconds));
+                await Task.Run(() => runProcess.WaitForExit(), cts.Token);
+            }
+            catch (OperationCanceledException)
+            {
+                if (!runProcess.HasExited)
+                    runProcess.Kill();
+                return new TestResultModel()
+                {
+                    Message = "Time limit exceeded",
+                    Runtime = (uint)problem.TimeLimitInSeconds,
+                    Score = 0,
+                    TestIndex = test.Index
+                };
+            }
+
+            var solutionContent = (await File.ReadAllTextAsync(Path.Combine(evaluationDirectory.FullName, problem.OutputFileName))).TrimEnd();
+            var testOutput = test.Output.TrimEnd();
 
             if (solutionContent == testOutput)
                 return new TestResultModel()
                 {
-                    Message = "Correct!",
+                    Message = $"Correct! {(runProcess.ExitTime - runProcess.StartTime).Milliseconds}",
                     Score = test.Score,
-                    Runtime = 0
+                    Runtime = (uint)stopwatch.Elapsed.Milliseconds,
+                    TestIndex = test.Index
                 };
 
 
             return new TestResultModel()
             {
                 Message = "Wrong answer",
-                Runtime = 0,
-                Score = 0
+                Runtime = (uint)stopwatch.Elapsed.Milliseconds,
+                Score = 0,
+                TestIndex = test.Index
             };
         }
         catch (Exception e)
@@ -163,7 +184,8 @@ public class EvaluationService(IProblemRepository problemRepository, ITestReposi
             {
                 Message = e.Message,
                 Runtime = 0,
-                Score = 0
+                Score = 0,
+                TestIndex = test.Index
             };
         }
         finally

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(OMIIasiDbContext))]
-    [Migration("20240617124247_runtimeTest")]
-    partial class runtimeTest
+    [Migration("20240618135759_addedtestindextosumbissiontestresult")]
+    partial class addedtestindextosumbissiontestresult
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -123,13 +123,13 @@ namespace API.Migrations
                     b.Property<long>("Index")
                         .HasColumnType("bigint");
 
-                    b.Property<byte[]>("Input")
+                    b.Property<string>("Input")
                         .IsRequired()
-                        .HasColumnType("varbinary(max)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("Output")
+                    b.Property<string>("Output")
                         .IsRequired()
-                        .HasColumnType("varbinary(max)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("ProblemId")
                         .HasColumnType("uniqueidentifier");
@@ -210,6 +210,9 @@ namespace API.Migrations
 
                             b1.Property<Guid>("SubmissionId")
                                 .HasColumnType("uniqueidentifier");
+
+                            b1.Property<long>("TestIndex")
+                                .HasColumnType("bigint");
 
                             b1.HasKey("Id");
 

@@ -1,7 +1,8 @@
 import { SubmissionTestResult } from "./submissionTestResult"
 
 export type SubmissionModel = {
-    date: Date,
     id: string,
+    solution: string,
+    date: Date,
     scores: SubmissionTestResult[]
 }

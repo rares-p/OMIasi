@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace API.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class bytearraytostring : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -66,8 +66,8 @@ namespace API.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ProblemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Index = table.Column<long>(type: "bigint", nullable: false),
-                    Input = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
-                    Output = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    Input = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Output = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Score = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
@@ -96,6 +96,35 @@ namespace API.Migrations
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "SubmissionResults",
+                schema: "omiiasi",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Score = table.Column<long>(type: "bigint", nullable: false),
+                    Runtime = table.Column<long>(type: "bigint", nullable: false),
+                    SubmissionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SubmissionResults", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SubmissionResults_Submissions_SubmissionId",
+                        column: x => x.SubmissionId,
+                        principalSchema: "omiiasi",
+                        principalTable: "Submissions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SubmissionResults_SubmissionId",
+                schema: "omiiasi",
+                table: "SubmissionResults",
+                column: "SubmissionId");
         }
 
         /// <inheritdoc />
@@ -106,7 +135,7 @@ namespace API.Migrations
                 schema: "omiiasi");
 
             migrationBuilder.DropTable(
-                name: "Submissions",
+                name: "SubmissionResults",
                 schema: "omiiasi");
 
             migrationBuilder.DropTable(
@@ -115,6 +144,10 @@ namespace API.Migrations
 
             migrationBuilder.DropTable(
                 name: "Users",
+                schema: "omiiasi");
+
+            migrationBuilder.DropTable(
+                name: "Submissions",
                 schema: "omiiasi");
         }
     }

@@ -1,10 +1,48 @@
 <div class="submission-card p-3 mb-3 rounded" [ngStyle]="{'background-color': getBackgroundColor()}">
     <div class="d-flex justify-content-between align-items-center">
         <div class="submission-date">
-            <span class="font-weight-bold">Date:</span> {{date | date:'yyyy-MM-dd HH:mm:ss'}}
+            <span class="font-weight-bold">Date:</span> {{submission.date| date:'yyyy-MM-dd HH:mm:ss'}}
         </div>
         <div class="submission-score ml-3">
             <span class="font-weight-bold">Score:</span> {{score}}
+        </div>
+        <button (click)="openDetails()" class="btn btn-link ml-auto">View More</button>
+    </div>
+</div>
+
+<div *ngIf="isPopupVisible" class="modal" tabindex="-1" role="dialog" style="display: block;">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Submission Details</h5>
+                <button type="button" class="close" (click)="closeDetails()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Index</th>
+                            <th>Message</th>
+                            <th>Score</th>
+                            <th>Runtime</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let test of submission.scores">
+                            <td>{{test.testIndex}}</td>
+                            <td>{{test.message}}</td>
+                            <td>{{test.score}}</td>
+                            <td>{{test.runtime}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <textarea disabled>{{submission.solution}}</textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="closeDetails()">Close</button>
+            </div>
         </div>
     </div>
 </div>

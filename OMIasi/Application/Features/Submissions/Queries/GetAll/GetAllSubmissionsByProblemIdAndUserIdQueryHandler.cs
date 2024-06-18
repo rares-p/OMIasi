@@ -17,13 +17,15 @@ public class GetAllSubmissionsByProblemIdAndUserIdQueryHandler(ISubmissionReposi
             {
                 Id = s.Id,
                 Date = s.Date,
+                Solution = s.Solution,
                 Scores = s.Scores.Select(score => new SubmissionTestDto()
                 {
                     Id = score.Id,
                     Message = score.Message,
                     Score = score.Score,
-                    Runtime = score.Runtime
-                }).ToList()
+                    Runtime = score.Runtime,
+                    TestIndex = score.TestIndex
+                }).OrderBy(submissionTestDto => submissionTestDto.TestIndex).ToList()
             })
         };
     }

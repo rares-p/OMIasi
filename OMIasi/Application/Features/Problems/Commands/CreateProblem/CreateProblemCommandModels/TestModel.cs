@@ -3,7 +3,7 @@
 public class TestModel
 {
     public uint Index { get; set; }
-    public byte[] Input { get; set; }
-    public byte[] Output { get; set; }
+    public string Input { get; set; }
+    public string Output { get; set; }
     public uint Score { get; set; }
 }

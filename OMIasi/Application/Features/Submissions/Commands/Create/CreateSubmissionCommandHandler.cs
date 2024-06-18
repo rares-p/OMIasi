@@ -25,7 +25,7 @@ public class CreateSubmissionCommandHandler(IProblemRepository problemRepository
             };
         try
         {
-            var testResults = evaluationResponse.Value.Select(resp => (resp.Message, resp.Score, resp.Runtime)).ToList();
+            var testResults = evaluationResponse.Value.Select(resp => (resp.Message, resp.Score, resp.Runtime, resp.TestIndex)).ToList();
             var submission = Submission.Create(request.UserId, request.ProblemId, request.Solution,
                 (uint)evaluationResponse.Value.Sum(test => test.Score), DateTime.Now, testResults);
             if (!submission.IsSuccess)
