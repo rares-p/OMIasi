@@ -24,6 +24,17 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.Limits.MaxRequestBodySize = 104857600; // 100 MB
+});
+
+// Configure IIS server options
+builder.Services.Configure<IISServerOptions>(options =>
+{
+    options.MaxRequestBodySize = 104857600; // 100 MB
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -1,0 +1,28 @@
+<div class="container user-profile mt-4" *ngIf="user">
+    <div class="row">
+        <div class="col-12 text-center">
+            <h2>{{ user.username }}'s Profile</h2>
+            <p>Role: {{ user.role }}</p>
+        </div>
+    </div>
+
+    <div class="row problems">
+        <div class="col-md-6 solved-problems">
+            <h3 class="text-center">Solved Problems</h3>
+            <ul class="list-group">
+                <li *ngFor="let problem of user.solvedProblems" class="list-group-item">
+                    <a [routerLink]="['/problems', problem]" class="text-success link-unstyled">{{ problem }}</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-md-6 attempted-problems">
+            <h3 class="text-center">Attempted Problems</h3>
+            <ul class="list-group">
+                <li *ngFor="let problem of user.attemptedProblems" class="list-group-item">
+                    <a [routerLink]="['/problems', problem]" class="text-danger link-unstyled">{{ problem }}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

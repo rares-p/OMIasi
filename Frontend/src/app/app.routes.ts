@@ -5,6 +5,7 @@ import { CreateProblemComponent } from './problems/create-problem/create-problem
 import { LoginComponent } from './user/login/login.component';
 import { RegisterComponent } from './user/register/register.component';
 import { EditProblemComponent } from './problems/edit-problem/edit-problem.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
 
 export const routes: Routes = [
     { path: '', component: AllProblemsComponent },
@@ -12,5 +13,7 @@ export const routes: Routes = [
     { path: 'createProblem', component: CreateProblemComponent },
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
-    { path: 'editProblem/:id', component: EditProblemComponent}
+    { path: 'editProblem/:id', component: EditProblemComponent},
+    { path: 'profile', component: UserProfileComponent},
+    { path: 'profile/:username', component: UserProfileComponent}
 ];

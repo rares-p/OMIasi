@@ -48,7 +48,7 @@ namespace Infrastructure.Services;
 public class EvaluationService(IProblemRepository problemRepository, ITestRepository testRepository)
     : IEvaluationService
 {
-    private readonly SemaphoreSlim _semaphore = new(20);
+    private readonly SemaphoreSlim _semaphore = new(2);
     private readonly string _baseFolderPath = "evaluate";
     private readonly string _compilerPath = "C:\\MinGW\\bin\\g++.exe";
 
@@ -85,6 +85,7 @@ public class EvaluationService(IProblemRepository problemRepository, ITestReposi
         await _semaphore.WaitAsync();
         var evaluationDirectory = Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(),
             _baseFolderPath, Guid.NewGuid().ToString()));
+        Process? run = null;
         try
         {
             var solutionPath = Path.Join(evaluationDirectory.FullName, "solution.cpp");
@@ -135,6 +136,7 @@ public class EvaluationService(IProblemRepository problemRepository, ITestReposi
                     CreateNoWindow = true
                 }
             };
+            run = runProcess;
 
             runProcess.Start();
             var stopwatch = Stopwatch.StartNew();
@@ -142,15 +144,45 @@ public class EvaluationService(IProblemRepository problemRepository, ITestReposi
             try
             {
                 using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(problem.TimeLimitInSeconds));
-                await Task.Run(runProcess.WaitForExit, cts.Token);
+                bool memoryExceeded = await Task.Run(() =>
+                {
+                    while (!runProcess.HasExited)
+                    {
+                        if (cts.IsCancellationRequested || runProcess.HasExited)
+                            return false;
+                        if (!(runProcess.PrivateMemorySize64 / (1024 * 1024) > problem.StackMemoryLimitInMb)) continue;
+                        if (!runProcess.HasExited)
+                            runProcess.Kill();
+                        return true;
+                    }
+                    return false;
+                }, cts.Token);
+
+                if (memoryExceeded)
+                {
+                    return new TestResultModel()
+                    {
+                        Message = "Memory limit exceeded",
+                        Runtime = 0,
+                        Score = 0,
+                        TestIndex = test.Index
+                    };
+                }
+
+                if (cts.IsCancellationRequested)
+                    return new TestResultModel()
+                    {
+                        Message = "Time limit exceeded",
+                        Runtime = (uint)problem.TimeLimitInSeconds,
+                        Score = 0,
+                        TestIndex = test.Index
+                    };
             }
-            catch (OperationCanceledException)
+            catch (Exception)
             {
-                if (!runProcess.HasExited)
-                    runProcess.Kill();
                 return new TestResultModel()
                 {
-                    Message = "Time limit exceeded",
+                    Message = "Server Problem. Try again later",
                     Runtime = (uint)problem.TimeLimitInSeconds,
                     Score = 0,
                     TestIndex = test.Index
@@ -163,7 +195,7 @@ public class EvaluationService(IProblemRepository problemRepository, ITestReposi
             if (solutionContent == testOutput)
                 return new TestResultModel()
                 {
-                    Message = $"Correct! {(runProcess.ExitTime - runProcess.StartTime).Milliseconds}",
+                    Message = "Correct!",
                     Score = test.Score,
                     Runtime = (uint)stopwatch.Elapsed.Milliseconds,
                     TestIndex = test.Index
@@ -190,7 +222,22 @@ public class EvaluationService(IProblemRepository problemRepository, ITestReposi
         }
         finally
         {
-            evaluationDirectory.Delete(true);
+            run?.Kill();
+            while (true)
+            {
+                try
+                {
+                    evaluationDirectory.Delete(true);
+                    break;
+                }
+                catch (UnauthorizedAccessException)
+                {
+                }
+                catch (Exception e)
+                {
+                    await Task.Delay(5);
+                }
+            }
             _semaphore.Release();
         }
     }

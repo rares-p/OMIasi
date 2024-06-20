@@ -9,6 +9,7 @@ import { LoginModel } from '../../models/auth/loginModel';
 import { BaseServerResponse } from '../../models/responses/baseServerResponse';
 import { JwtPayload, jwtDecode } from 'jwt-decode';
 import { JwtInterface } from './jwt-interface';
+import { JwtModel } from '../../models/JwtModel';
 
 @Injectable({
     providedIn: 'root',
@@ -121,6 +122,12 @@ export class AuthService {
                                 response.body.value
                             ).role;
                             if (role) localStorage.setItem('role', role);
+
+                            let username = jwtDecode<JwtModel>(
+                                response.body.value
+                            ).unique_name;
+                            if (role) localStorage.setItem('username', username);
+
                             this.loggedIn.next(true);
                             return { success: true, error: null };
                         } else {
@@ -159,5 +166,9 @@ export class AuthService {
 
     isUserLoggedIn(): Observable<boolean> {
         return this.loggedIn.asObservable();
+    }
+
+    getUserName(): string {
+        return localStorage.getItem('username') ?? ''
     }
 }
