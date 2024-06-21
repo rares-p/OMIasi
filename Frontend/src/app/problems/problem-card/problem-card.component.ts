@@ -14,7 +14,6 @@ export class ProblemCardComponent {
     constructor(private router: Router, private authService: AuthService) {}
 
     solve(): void {
-        console.log(this.problem);
         this.router.navigate([`problems/${this.problem!.title}`], {
             state: { problem: this.problem },
         });

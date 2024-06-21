@@ -8,6 +8,7 @@ import { CreateProblemComponent } from './create-problem/create-problem.componen
 import { EditProblemComponent } from './edit-problem/edit-problem.component';
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 import { SubmissionCardComponent } from "../submissions/submission-card/submission-card.component";
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 @NgModule({
     declarations: [
@@ -22,7 +23,8 @@ import { SubmissionCardComponent } from "../submissions/submission-card/submissi
         FormsModule,
         ReactiveFormsModule,
         CodemirrorModule,
-        SubmissionCardComponent
+        SubmissionCardComponent,
+        NgMultiSelectDropDownModule
     ]
 })
 export class ProblemsModule { }

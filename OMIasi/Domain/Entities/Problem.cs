@@ -21,6 +21,7 @@ public partial class Problem : AuditableEntity
     private static partial Regex OutputFileRegex();
     public string OutputFileName { get; private set;}
     public uint Year { get; private set; }
+    public ICollection<Test> Tests { get; private set; }
 
     private Problem(string title, string description, uint noTests, string author, float timeLimitInSeconds,
         float totalMemoryLimitInMb, float stackMemoryLimitInMb, uint grade, string inputFileName, string outputFileName,

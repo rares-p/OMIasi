@@ -20,7 +20,6 @@ export class NavbarComponent implements OnInit {
 
     logout(): void {
         this.authService.logout();
-        console.log('LOGGED OUT');
     }
 
     async onCreateProblem(): Promise<void> {

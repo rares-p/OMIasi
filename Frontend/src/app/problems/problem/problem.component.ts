@@ -42,7 +42,6 @@ int main()
         });
 
         const navigation = this.router.getCurrentNavigation();
-        console.log('Navigation state:', navigation?.extras.state);
 
         if (navigation?.extras.state && navigation.extras.state['problem']) {
             this.problem = navigation.extras.state['problem'] as Problem;
@@ -56,7 +55,6 @@ int main()
                     await this.submissionService.getAllSubmissions(
                         this.problem.id
                     );
-                console.log(submissionsResponse);
                 this.submissions = submissionsResponse.submissions;
             }
         }
@@ -70,7 +68,6 @@ int main()
         let result = await this.problemService.deleteProblemById(
             this.problem.id
         );
-        console.log('DELETION RESULT: ', result);
         if (result.success) {
             this.toasr.success(
                 `Problem ${this.problem.title} deleted sucessfully!`
@@ -85,13 +82,15 @@ int main()
     }
 
     async submitSolution() {
-        await this.submissionService.createSubmission({
+        this.toasr.info("Sending solution ... Please wait")
+        let response = await this.submissionService.createSubmission({
             problemId: this.problem!.id,
             solution: this.solution,
         });
+        if(!response.success)
+            this.toasr.error(response.error ?? "Unknown error encountered, please try again later")
         let submissionsResponse =
             await this.submissionService.getAllSubmissions(this.problem!.id);
-        console.log(submissionsResponse);
         this.submissions = submissionsResponse.submissions;
     }
 

@@ -9,7 +9,6 @@ import { LoginModel } from '../../models/auth/loginModel';
 import { BaseServerResponse } from '../../models/responses/baseServerResponse';
 import { JwtPayload, jwtDecode } from 'jwt-decode';
 import { JwtInterface } from './jwt-interface';
-import { JwtModel } from '../../models/JwtModel';
 
 @Injectable({
     providedIn: 'root',
@@ -30,7 +29,6 @@ export class AuthService {
     }
 
     async register(registerModel: RegisterModel): Promise<BaseResponse> {
-        console.log(registerModel);
         if (!registerModel.username.trim()) {
             return {
                 success: false,
@@ -123,7 +121,7 @@ export class AuthService {
                             ).role;
                             if (role) localStorage.setItem('role', role);
 
-                            let username = jwtDecode<JwtModel>(
+                            let username = jwtDecode<JwtInterface>(
                                 response.body.value
                             ).unique_name;
                             if (role) localStorage.setItem('username', username);

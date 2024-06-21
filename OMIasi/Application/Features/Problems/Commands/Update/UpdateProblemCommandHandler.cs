@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Application.Features.Problems.Commands.Update;
 
-public class UpdateProblemCommandHandler(IProblemRepository problemRepository, ITestRepository testRepository) : IRequestHandler<UpdateProblemCommand, UpdateProblemCommandResponse>
+public class UpdateProblemCommandHandler(IProblemRepository problemRepository, ITestRepository testRepository, ITestContentRepository testContentRepository) : IRequestHandler<UpdateProblemCommand, UpdateProblemCommandResponse>
 {
     public async Task<UpdateProblemCommandResponse> Handle(UpdateProblemCommand request, CancellationToken cancellationToken)
     {
@@ -32,6 +32,13 @@ public class UpdateProblemCommandHandler(IProblemRepository problemRepository, I
                 Error = "Scores must add up to 100"
             };
 
+        if (request.Tests.Where(test => test.Id is null).Any(test => test.Input is null || test.Output is null))
+            return new UpdateProblemCommandResponse()
+            {
+                Success = false,
+                Error = "Content for created tests cannot be empty"
+            };
+
         foreach (var test in request.Tests.Where(test => test.Id != null))
         {
             var testResult = await testRepository.FindByIdAsync((Guid)test.Id!);
@@ -50,7 +57,10 @@ public class UpdateProblemCommandHandler(IProblemRepository problemRepository, I
         }
         foreach (var test in testsResult.Value)
             if (request.Tests.All(reqTest => reqTest.Id != test.Id))
+            {
                 await testRepository.DeleteAsync(test.Id);
+                await testContentRepository.DeleteTest(test.ProblemId, test.Id);
+            }
 
         var updateProblemResult = UpdateProblem(problemResult, request);
         if (!updateProblemResult.IsSuccess)
@@ -65,7 +75,7 @@ public class UpdateProblemCommandHandler(IProblemRepository problemRepository, I
 
         foreach (var test in request.Tests)
         {
-            if (test.Id != null)
+            if (test.Id is not null)
             {
                 var testResult = await testRepository.FindByIdAsync((Guid)test.Id);
                 var updateTestResult = UpdateTest(testResult, request.Tests.First(t => t.Id == testResult.Value.Id));
@@ -75,11 +85,15 @@ public class UpdateProblemCommandHandler(IProblemRepository problemRepository, I
                         Success = false,
                         Error = updateTestResult.Error
                     };
+                if(test.Input is not null)
+                 await testContentRepository.UpdateInput(problemResult.Value.Id, (Guid)test.Id, test.Input);
+                if (test.Output is not null)
+                    await testContentRepository.UpdateOutput(problemResult.Value.Id, (Guid)test.Id, test.Output);
                 updateTestResults.Add(updateTestResult);
             }
             else
             {
-                var testResult = Test.Create(request.Id, test.Index, test.Input, test.Output, test.Score);
+                var testResult = Test.Create(request.Id, test.Index, test.Score);
                 if (!testResult.IsSuccess)
                     return new UpdateProblemCommandResponse()
                     {
@@ -87,6 +101,9 @@ public class UpdateProblemCommandHandler(IProblemRepository problemRepository, I
                         Error = testResult.Error
                     };
                 createTestResults.Add(testResult);
+                if (test.Input is not null && test.Output is not null)
+                    await testContentRepository.CreateTest(problemResult.Value.Id, testResult.Value.Id, test.Input,
+                        test.Output);
             }
         }
 
@@ -174,13 +191,13 @@ public class UpdateProblemCommandHandler(IProblemRepository problemRepository, I
         if(!updateIndexResult.IsSuccess)
             return Result<Test>.Failure(updateIndexResult.Error);
 
-        var updateInputResult = testResult.Value.UpdateInput(request.Input);
-        if(!updateInputResult.IsSuccess)
-            return Result<Test>.Failure(updateInputResult.Error);
+        //var updateInputResult = testResult.Value.UpdateInput(request.Input);
+        //if(!updateInputResult.IsSuccess)
+        //    return Result<Test>.Failure(updateInputResult.Error);
 
-        var updateOutputResult = testResult.Value.UpdateOutput(request.Output);
-        if (!updateOutputResult.IsSuccess)
-            return Result<Test>.Failure(updateOutputResult.Error);
+        //var updateOutputResult = testResult.Value.UpdateOutput(request.Output);
+        //if (!updateOutputResult.IsSuccess)
+        //    return Result<Test>.Failure(updateOutputResult.Error);
 
         var updateScoreResult = testResult.Value.UpdateScore(request.Score);
         if(!updateScoreResult.IsSuccess)

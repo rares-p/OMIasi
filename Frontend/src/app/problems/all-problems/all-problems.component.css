@@ -1,20 +1,84 @@
 .problemListContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start; /* Align items to the left */
-  padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    width: 100%;
 }
 
 .year-section {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start; /* Align items to the left */
-  width: 100%;
-  margin-bottom: 20px;
+    width: 100%;
+    margin-bottom: 20px;
 }
 
 .problemListContainer h2 {
-  width: 100%;
-  text-align: left; /* Align year header to the left */
-  margin: 20px 0;
+    width: 100%;
+    text-align: left;
+    margin: 20px 0;
+}
+
+.card {
+    width: 100%; 
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.card-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.card-body {
+    flex-grow: 1; 
+    overflow: hidden;
+}
+
+.card-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.card-footer {
+    background-color: #f8f9fa;
+    border-top: none;
+    display: flex;
+    justify-content: space-between;
+}
+
+.card-footer button {
+    margin: 0 5px;
+}
+
+.multiselect-dropdown .dropdown-btn {
+    background-color: #ffffff;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    padding: 8px 12px;
+}
+
+.multiselect-dropdown .dropdown-list {
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #343a40;
+}
+
+@media (max-width: 768px) {
+    .year-section .col-md-4 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
 }

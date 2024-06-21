@@ -11,6 +11,7 @@ import { ProblemFull } from '../../models/problems/problemFull';
 import { TestFull } from '../../models/problems/testFull';
 import { saveAs } from 'file-saver';
 import { ToastrService } from 'ngx-toastr';
+import { TestService } from '../../services/tests/test.service';
 
 @Component({
     selector: 'app-edit-problem',
@@ -20,12 +21,14 @@ import { ToastrService } from 'ngx-toastr';
 export class EditProblemComponent implements OnInit {
     problem!: ProblemFull;
     problemForm: FormGroup;
+    loading: boolean = true;
 
     constructor(
         private fb: FormBuilder,
         private router: Router,
         private route: ActivatedRoute,
         private problemService: ProblemService,
+        private testService: TestService,
         private toastr: ToastrService
     ) {
         this.problemForm = this.fb.group({
@@ -70,22 +73,21 @@ export class EditProblemComponent implements OnInit {
 
     async ngOnInit(): Promise<void> {
         const navigation = this.router.getCurrentNavigation();
-        console.log('Navigation state:', navigation?.extras.state);
 
         const problemId = this.route.snapshot.paramMap.get('id') ?? '';
         if (problemId) {
             this.problem = await this.problemService.getFullProblemById(
                 problemId
             );
+            this.loading = false;
         }
 
         if (this.problem) {
             await this.problem.tests.sort((a, b) => a.index - b.index);
             await this.problem.tests.forEach((test) => {
-                test.input = test.input.toString()
-                test.output = test.output.toString()
+                test.input = null;
+                test.output = null;
             });
-            console.log(this.problem.tests);
             this.problemForm.patchValue(this.problem);
         }
 
@@ -128,14 +130,23 @@ export class EditProblemComponent implements OnInit {
             );
     }
 
-    downloadTestFile(test: TestFull, type: 'input' | 'output') {
-        let data = test[type];
+    async downloadTestFile(test: TestFull, type: 'input' | 'output') {
+        if (!test.input || !test.output) {
+            let testContent = await this.testService.getTestContentById(
+                test.id
+            );
+            test.input = testContent.input;
+            test.output = testContent.output;
+        }
+
         let fileName =
             this.problem.inputFileName.split('.')[0] +
             '-' +
             test.index +
-            (type == 'input' ? '.in' : 'out');
-        saveAs(new Blob([data]), fileName);
+            (type == 'input' ? '.in' : '.out');
+        let data = test[type]
+
+        saveAs(new Blob([data!]), fileName)
     }
 
     async onFileSelected(
@@ -170,12 +181,11 @@ export class EditProblemComponent implements OnInit {
             this.problem.tests.push({
                 id: null!,
                 index: this.problem.noTests - 1,
-                input: "",
-                output: "",
+                input: '',
+                output: '',
                 score: 0,
             });
         else this.problem.tests.pop();
-        console.log(this.problem);
     }
 
     adjustFileIndex(index: number, direction: 'up' | 'down') {
@@ -188,6 +198,5 @@ export class EditProblemComponent implements OnInit {
         const temp = this.problem.tests[newIndex];
         this.problem.tests[newIndex] = this.problem.tests[index];
         this.problem.tests[index] = temp;
-        console.log(this.problem);
     }
 }

@@ -1,4 +1,4 @@
-﻿using Application.Features.Tests.Queries.GetAll;
+﻿using Application.Features.Tests.Queries.GetById;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,11 +8,11 @@ namespace API.Controllers;
 public class TestsController : ApiControllerBase
 {
     [HttpGet]
-    [Authorize(Roles = "Admin")]
-    [HttpGet("{problemId:guid}")]
-    public async Task<IActionResult> GetAllByProblemId(Guid problemId)
+    //[Authorize(Roles = "Admin")]
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> GetAllByProblemId(Guid id)
     {
-        var result = await Mediator.Send(new GetAllTestsQuery(problemId));
+        var result = await Mediator.Send(new GetTestByIdQuery(id));
         return Ok(result);
     }
 }

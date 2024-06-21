@@ -120,14 +120,6 @@ namespace API.Migrations
                     b.Property<long>("Index")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("Input")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Output")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<Guid>("ProblemId")
                         .HasColumnType("uniqueidentifier");
 
@@ -135,6 +127,8 @@ namespace API.Migrations
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProblemId");
 
                     b.ToTable("Tests", "omiiasi");
                 });
@@ -222,6 +216,20 @@ namespace API.Migrations
                         });
 
                     b.Navigation("Scores");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Test", b =>
+                {
+                    b.HasOne("Domain.Entities.Problem", null)
+                        .WithMany("Tests")
+                        .HasForeignKey("ProblemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Entities.Problem", b =>
+                {
+                    b.Navigation("Tests");
                 });
 #pragma warning restore 612, 618
         }

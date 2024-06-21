@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Application.Features.Problems.Commands.CreateProblem;
 
-public class CreateProblemCommandHandler(IProblemRepository problemRepository, ITestRepository testRepository) : IRequestHandler<CreateProblemCommand, CreateProblemCommandResponse>
+public class CreateProblemCommandHandler(IProblemRepository problemRepository, ITestRepository testRepository, ITestContentRepository testContentRepository) : IRequestHandler<CreateProblemCommand, CreateProblemCommandResponse>
 {
     public async Task<CreateProblemCommandResponse> Handle(CreateProblemCommand request, CancellationToken cancellationToken)
     {
@@ -36,7 +36,7 @@ public class CreateProblemCommandHandler(IProblemRepository problemRepository, I
                 Error = problem.Error
             };
 
-        var tests = request.Tests.Select(test => Test.Create(problem.Value.Id, test.Index, test.Input, test.Output, test.Score)).ToList();
+        var tests = request.Tests.Select(test => Test.Create(problem.Value.Id, test.Index, test.Score)).ToList();
 
         if (tests.Any(test => !test.IsSuccess))
             return new CreateProblemCommandResponse()
@@ -44,6 +44,19 @@ public class CreateProblemCommandHandler(IProblemRepository problemRepository, I
                 Success = false,
                 Error = string.Join('\n', tests.Select(test => test.Error).ToList())
             };
+
+        foreach (var test in tests)
+        {
+            var index = test.Value.Index;
+            var result = await testContentRepository.CreateTest(problem.Value.Id, test.Value.Id,
+                request.Tests[(int)index].Input, request.Tests[(int)index].Output);
+            if (!result)
+                return new CreateProblemCommandResponse()
+                {
+                    Success = false,
+                    Error = "Invalid test input"
+                };
+        }
 
         try
         {

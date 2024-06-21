@@ -9,12 +9,9 @@ public class GetProblemAndTestsByIdQueryHandler(IProblemRepository problemReposi
 {
     public async Task<Result<GetProblemAndTestsByIdQueryResponse>> Handle(GetProblemAndTestsByIdQuery request, CancellationToken cancellationToken)
     {
-        var problemResult = await problemRepository.FindByIdAsync(request.ProblemId);
+        var problemResult = await problemRepository.GetProblemWithTestsById(request.ProblemId);
         if (!problemResult.IsSuccess)
             return Result<GetProblemAndTestsByIdQueryResponse>.Failure(problemResult.Error);
-        var testsResult = await testRepository.GetAllAsyncByProblemId(request.ProblemId);
-        if (!testsResult.IsSuccess)
-            return Result<GetProblemAndTestsByIdQueryResponse>.Failure(testsResult.Error);
         return Result<GetProblemAndTestsByIdQueryResponse>.Success(new()
         {
             Id = problemResult.Value.Id,
@@ -29,12 +26,10 @@ public class GetProblemAndTestsByIdQueryHandler(IProblemRepository problemReposi
             InputFileName = problemResult.Value.InputFileName,
             OutputFileName = problemResult.Value.OutputFileName,
             Year = problemResult.Value.Year,
-            Tests = testsResult.Value.Select(test => new TestDto()
+            Tests = problemResult.Value.Tests.Select(test => new TestDto()
             {
                 Id = test.Id,
                 Index = test.Index,
-                Input = test.Input,
-                Output = test.Output,
                 Score = test.Score
             }).ToList()
         });

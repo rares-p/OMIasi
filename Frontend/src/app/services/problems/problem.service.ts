@@ -38,7 +38,6 @@ export class ProblemService {
     }
 
     async createProblem(createProblem: CreateProblem): Promise<BaseResponse> {
-        console.log(`Posting problem at${this.apiUrl}`, createProblem);
         return await firstValueFrom(
             this.http
                 .post<BaseResponse>(this.apiUrl, createProblem, {
@@ -92,14 +91,13 @@ export class ProblemService {
             ...problem,
             tests: problem.tests.map((test) => ({
                 ...test,
-                input: test.input.trim(),
-                output: test.output.trim(),
+                // input: test.input.trim(),
+                // output: test.output.trim(),
             })),
         };
         let resp = await firstValueFrom(
             this.http.put<BaseResponse>(`${this.apiUrl}`, problemToSend)
         );
-        console.log(resp)
         return resp;
     }
 

@@ -38,7 +38,7 @@ export class SubmissionsService {
                         console.error('Error during submission:', error);
                         return {
                             success: false,
-                            error: error,
+                            error: error.error.error,
                         };
                     })
                 )

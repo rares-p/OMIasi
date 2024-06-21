@@ -1,7 +1,7 @@
 export type TestFull = {
     id: string,
     index: number,
-    input: string,
-    output: string,
+    input: string | null,
+    output: string | null,
     score: number
 }

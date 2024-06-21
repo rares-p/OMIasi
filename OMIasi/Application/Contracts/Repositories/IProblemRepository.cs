@@ -7,4 +7,5 @@ public interface IProblemRepository : IAsyncRepository<Problem>
 {
     Task<bool> ExistsAsync(string name);
     Task<Result<Problem>> FindByTitleAsync(string title);
+    Task<Result<Problem>> GetProblemWithTestsById(Guid id);
 }

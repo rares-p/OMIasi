@@ -2,6 +2,8 @@
 using Application.Contracts;
 using Application.Contracts.Identity;
 using Application.Contracts.Repositories;
+using Azure.Identity;
+using Azure.Storage.Blobs;
 using Domain.Entities;
 using Infrastructure.Repositories;
 using Infrastructure.Services;
@@ -32,6 +34,8 @@ public static class InfrastructureRegistrationDi
         services.AddScoped<IProblemRepository, ProblemRepository>();
         services.AddScoped<ITestRepository, TestRepository>();
         services.AddScoped<ISubmissionRepository, SubmissionRepository>();
+        services.AddScoped<ITestContentRepository, TestContentRepository>();
+
 
         services.AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();
 
@@ -61,6 +65,13 @@ public static class InfrastructureRegistrationDi
 
         services.Configure<EvaluationServiceSettings>(configuration.GetSection("EvaluationService"));
         services.AddHttpClient<IEvaluationService, EvaluationService>();
+
+        //services.AddSingleton(new BlobServiceClient(
+        //    new Uri("https://omiiasi.blob.core.windows.net"),
+        //    new DefaultAzureCredential()));
+        services.AddSingleton(new BlobContainerClient(
+            "DefaultEndpointsProtocol=https;AccountName=omiiasi;AccountKey=4gKrBBFwBVf52jIKOIlxFqj/ps0PT/p8TyVBQKUVtjfEV8YgUJcmfgpwNf8uJulbC32Fc22XjwDw+ASt89LbmA==;BlobEndpoint=https://omiiasi.blob.core.windows.net/;TableEndpoint=https://omiiasi.table.core.windows.net/;QueueEndpoint=https://omiiasi.queue.core.windows.net/;FileEndpoint=https://omiiasi.file.core.windows.net/",
+            "tests"));
 
         return services;
     }

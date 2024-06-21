@@ -1,13 +1,43 @@
-<div class="problemListContainer">
-    <ng-container *ngFor="let year of getYears()">
-      <div *ngIf="problemsByYear[year]?.length">
-        <h2>{{ year }}</h2>
-        <div class="year-section">
-          <div *ngFor="let problem of problemsByYear[year]">
-            <problem-card [problem]="problem"></problem-card>
-          </div>
+<div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col-md-6 mb-3">
+            <label for="yearFilter" class="form-label">Filter by Year</label>
+            <ng-multiselect-dropdown
+                [data]="years"
+                [(ngModel)]="selectedYears"
+                [settings]="dropdownSettings"
+                (onSelect)="filterProblems()"
+                (onDeSelect)="filterProblems()"
+                (onSelectAll)="filterProblems()"
+                (onDeSelectAll)="filterProblems()">
+            </ng-multiselect-dropdown>
         </div>
-      </div>
-    </ng-container>
-  </div>
-  
+        <div class="col-md-6 mb-3">
+            <label for="gradeFilter" class="form-label">Filter by Grade</label>
+            <ng-multiselect-dropdown
+                [data]="grades"
+                [(ngModel)]="selectedGrades"
+                [settings]="dropdownSettings"
+                (onSelect)="filterProblems()"
+                (onDeSelect)="filterProblems()"
+                (onSelectAll)="filterProblems()"
+                (onDeSelectAll)="filterProblems()">
+            </ng-multiselect-dropdown>
+        </div>
+    </div>
+
+    <div class="problemListContainer">
+        <ng-container *ngFor="let year of filteredYears">
+            <div *ngIf="filteredProblemsByYear[year]?.length">
+                <h2>{{ year }}</h2>
+                <div class="year-section">
+                    <div class="row">
+                        <div class="col-md-4 mb-4" *ngFor="let problem of filteredProblemsByYear[year]">
+                            <problem-card [problem]="problem"></problem-card>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+</div>

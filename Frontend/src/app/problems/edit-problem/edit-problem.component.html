@@ -1,4 +1,9 @@
-<form [formGroup]="problemForm"> <!--(ngSubmit)="onSubmit()"-->
+<div *ngIf="loading">
+    <!-- Add your loading indicator here, e.g., spinner or loading message -->
+    Loading problem details...
+</div>
+
+<form [formGroup]="problemForm" *ngIf="!loading"> <!--(ngSubmit)="onSubmit()"-->
     <div>
         <label for="title">Title <i class="fas fa-heading"></i></label>
         <input id="title" formControlName="title" />

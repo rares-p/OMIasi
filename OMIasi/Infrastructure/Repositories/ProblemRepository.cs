@@ -18,4 +18,12 @@ public class ProblemRepository(OMIIasiDbContext context) : BaseRepository<Proble
             ? Result<Problem>.Success(problem)
             : Result<Problem>.Failure($"Problem with title {title} not found!");
     }
+
+    public async Task<Result<Problem>> GetProblemWithTestsById(Guid id)
+    {
+        var problem = await _context.Problems.Include(problem => problem.Tests).FirstOrDefaultAsync(problem => problem.Id == id);
+        if(problem == null)
+            return Result<Problem>.Failure("Problem not found");
+        return Result<Problem>.Success(problem);
+    }
 }
