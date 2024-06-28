@@ -6,7 +6,7 @@
         <p class="card-text"><strong>Grade:</strong> {{ problem.grade }}</p>
     </div>
     <div class="card-footer bg-white d-flex justify-content-between align-items-center">
-        <button *ngIf="isAdmin" class="btn btn-outline-secondary btn-sm" (click)="edit()">Edit</button>
+        <button *ngIf="isTeacher" class="btn btn-outline-secondary btn-sm" (click)="edit()">Edit</button>
         <button class="btn btn-primary btn-sm" (click)="solve()">Solve</button>
     </div>
 </div>

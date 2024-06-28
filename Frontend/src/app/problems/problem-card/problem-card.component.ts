@@ -25,7 +25,7 @@ export class ProblemCardComponent {
         });
     }
 
-    get isAdmin(): boolean {
-        return this.authService.isAdmin();
+    get isTeacher(): boolean {
+        return this.authService.isTeacher();
     }
 }

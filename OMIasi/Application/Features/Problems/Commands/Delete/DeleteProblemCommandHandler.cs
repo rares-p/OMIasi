@@ -12,7 +12,7 @@ public class DeleteProblemCommandHandler(IProblemRepository problemRepository) :
             return new DeleteProblemCommandResponse
             {
                 Success = false,
-                ValidationsErrors = [result.Error]
+                Error = result.Error
             };
 
         return new DeleteProblemCommandResponse

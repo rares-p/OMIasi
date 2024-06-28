@@ -23,8 +23,38 @@ export class UserProfileComponent implements OnInit {
     ) {}
 
     async ngOnInit(): Promise<void> {
-        this.username = this.route.snapshot.paramMap.get('username') ?? this.authService.getUserName()
-        if(this.username)
-            this.user = await this.userService.getProfile(this.username);
+        // this.username = this.route.snapshot.paramMap.get('username') ?? this.authService.getUserName()
+        // if(this.username)
+        //     this.user = await this.userService.getProfile(this.username);
+        this.route.params.subscribe(async (params: Params) => {
+            this.username =
+                params['username'] || this.authService.getUserName();
+            if (this.username) {
+                this.user = await this.userService.getProfile(this.username);
+            }
+        });
+
+        console.log(this.authService.isAdmin());
+    }
+
+    get isAdmin(): boolean {
+        return this.authService.isAdmin();
+    }
+
+    async updateUserRole(role: string): Promise<void> {
+        if (!this.user) return;
+        let response = await this.userService.updateUserRole(
+            this.user.username,
+            role
+        );
+        if (response.success) this.user.role = response.role;
+    }
+
+    async deleteUser() :Promise<void> {
+        if(!this.user)
+            return
+        let response = await this.userService.deleteUser(this.user.username)
+        if(response.success)
+            this.user = undefined
     }
 }

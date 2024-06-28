@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using Domain.Common;
+using Domain.Data;
 
 namespace Domain.Entities;
 
@@ -45,6 +46,8 @@ public partial class Problem : AuditableEntity
         float timeLimitInSeconds, float totalMemoryLimitInMb, float stackMemoryLimitInMb, uint grade,
         string inputFileName, string outputFileName, uint year)
     {
+        var a = UserRole.Teacher;
+        var b = UserRole.Admin;
         if (string.IsNullOrWhiteSpace(title))
             return Result<Problem>.Failure("Problem title cannot be empty!");
         if(string.IsNullOrWhiteSpace(description))

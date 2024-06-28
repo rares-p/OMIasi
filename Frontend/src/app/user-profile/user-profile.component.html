@@ -1,7 +1,14 @@
 <div class="container user-profile mt-4" *ngIf="user">
     <div class="row">
-        <div class="col-12 text-center">
+        <div class="col-12 text-center position-relative">
             <h2>{{ user.username }}'s Profile</h2>
+            <div *ngIf="isAdmin" class="button-group position-absolute" style="top: 0; right: 10px;">
+                <button type="button" class="btn btn-outline-info" *ngIf="user.role == 'Student'" (click) = "updateUserRole('Teacher')">Make Teacher</button>
+                <button type="button" class="btn btn-outline-info" *ngIf="user.role == 'Teacher'" (click) = "updateUserRole('Student')">Make Student</button>
+                <button type="button" class="btn btn-outline-danger ms-2" (click) = "deleteUser()">X Remove</button>
+            </div>
+        </div>
+        <div class="col-12 text-center">
             <p>Role: {{ user.role }}</p>
         </div>
     </div>

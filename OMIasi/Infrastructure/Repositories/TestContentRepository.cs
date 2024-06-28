@@ -26,16 +26,16 @@ public class TestContentRepository(BlobContainerClient blobContainer) : ITestCon
 
     public async Task<bool> UpdateInput(Guid problemId, Guid testId, string input)
     {
-        var inputResponse = await blobContainer.UploadBlobAsync($"{problemId}/{testId}.in",
-            new MemoryStream(System.Text.Encoding.UTF8.GetBytes(input)));
+        var inputBlob = blobContainer.GetBlobClient($"{problemId}/{testId}.in");
+        var inputResponse = await inputBlob.UploadAsync(new MemoryStream(System.Text.Encoding.UTF8.GetBytes(input)), overwrite: true);
         if (inputResponse == null) return false;
         return true;
     }
 
     public async Task<bool> UpdateOutput(Guid problemId, Guid testId, string output)
     {
-        var outputResponse = await blobContainer.UploadBlobAsync($"{problemId}/{testId}.ok",
-            new MemoryStream(System.Text.Encoding.UTF8.GetBytes(output)));
+        var outputResponse = await blobContainer.GetBlobClient($"{problemId}/{testId}.ok")
+            .UploadAsync(new MemoryStream(System.Text.Encoding.UTF8.GetBytes(output)), overwrite: true);
         if (outputResponse == null) return false;
         return true;
     }

@@ -10,8 +10,8 @@ public class EvaluationService(IProblemRepository problemRepository, ITestReposi
     : IEvaluationService
 {
     private readonly SemaphoreSlim _semaphore = new(2);
-    private readonly string _baseFolderPath = "evaluate";
-    private readonly string _compilerPath = "C:\\MinGW\\bin\\g++.exe";
+    private readonly string _baseFolderPath = "/tmp/evaluate";
+    private readonly string _compilerPath = "/usr/bin/g++";
 
     public async Task<EvaluationResponse> Evaluate(Evaluation evaluation)
     {
@@ -26,12 +26,13 @@ public class EvaluationService(IProblemRepository problemRepository, ITestReposi
             return new EvaluationResponse
             {
                 Success = false,
+                Error = problemResult.Error,
                 Results = null!
             };
         }
 
         var testsResult = await testRepository.GetTestsByProblemIdAsync(problemId);
-        var evaluationTasks = testsResult.Value.Select(test => EvaluateTestAsync(problemResult.Value, test, solution));
+        var evaluationTasks = testsResult.Value.Select(async test => await EvaluateTestAsync(problemResult.Value, new TestModel(test.Index, test.Score, await testRepository.GetTest(test.ProblemId, test.Id)), solution));
         var solutionResult = await Task.WhenAll(evaluationTasks);
 
         return new EvaluationResponse
@@ -41,7 +42,7 @@ public class EvaluationService(IProblemRepository problemRepository, ITestReposi
         };
     }
 
-    private async Task<TestResultModel> EvaluateTestAsync(Problem problem, Test test, string solution)
+    private async Task<TestResultModel> EvaluateTestAsync(Problem problem, TestModel test, string solution)
     {
         await _semaphore.WaitAsync();
         var evaluationDirectory = Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(),

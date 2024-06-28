@@ -48,7 +48,7 @@ public class ProblemController : ApiControllerBase
     }
 
     [HttpPost]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Teacher,Admin")]
     public async Task<IActionResult> Create([FromBody] CreateProblemCommand command)
     {
         var result = await Mediator.Send(command);
@@ -72,7 +72,7 @@ public class ProblemController : ApiControllerBase
 
 
     [HttpDelete("{id:guid}")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Teacher,Admin")]
     public async Task<IActionResult> Delete(Guid id)
     {
         var result = await Mediator.Send(new DeleteProblemCommand(id));

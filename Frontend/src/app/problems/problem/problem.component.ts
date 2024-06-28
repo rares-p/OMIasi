@@ -77,8 +77,8 @@ int main()
         else this.toasr.error('Unknown error encountered from server.');
     }
 
-    get isAdmin(): boolean {
-        return this.authService.isAdmin();
+    get isTeacher(): boolean {
+        return this.authService.isTeacher();
     }
 
     async submitSolution() {

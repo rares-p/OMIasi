@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth/auth.service';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'app-navbar',
@@ -9,8 +10,9 @@ import { Router } from '@angular/router';
 })
 export class NavbarComponent implements OnInit {
     isLoggedIn: boolean = false;
+    searchQuery: string = '';
 
-    constructor(private authService: AuthService, private router: Router) {}
+    constructor(private authService: AuthService, private router: Router, private toastr: ToastrService) {}
 
     ngOnInit(): void {
         this.authService.isUserLoggedIn().subscribe((status) => {
@@ -26,7 +28,14 @@ export class NavbarComponent implements OnInit {
         await this.router.navigate(['/createProblem']);
     }
 
-    isAdmin(): boolean {
-        return this.authService.isAdmin();
+    isTeacher(): boolean {
+        return this.authService.isTeacher();
     }
+
+    async onSearch() {
+        if(this.searchQuery == "")
+            this.toastr.error("Cannot search with empty username")
+        else
+            await this.router.navigate([`/profile/${this.searchQuery}`]);
+      }
 }

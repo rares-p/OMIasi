@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { routes } from './app.routes';
 import { ProblemsModule } from './problems/problems.module';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserModule } from './user/user.module';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -19,6 +19,7 @@ import { NavbarComponent } from './navbar/navbar.component';
         ReactiveFormsModule,
         UserModule,
         BrowserAnimationsModule,
+        FormsModule,
         ToastrModule.forRoot()], providers: [
         {
             provide: HTTP_INTERCEPTORS,

@@ -161,6 +161,10 @@ export class AuthService {
     isAdmin(): boolean {
         return this.getUserRole() == 'Admin' || this.getUserRole() == 'admin';
     }
+    
+    isTeacher(): boolean {
+        return this.getUserRole()?.toLowerCase() == 'admin' || this.getUserRole()?.toLowerCase() == 'teacher'
+    }
 
     isUserLoggedIn(): Observable<boolean> {
         return this.loggedIn.asObservable();
