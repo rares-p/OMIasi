@@ -22,7 +22,7 @@
                 <h2>{{ year }}</h2>
                 <div class="year-section">
                     <div class="row">
-                        <div class="col-md-4 mb-4" *ngFor="let problem of filteredProblemsByYear[year]">
+                        <div class="col mb-4" *ngFor="let problem of filteredProblemsByYear[year]">
                             <problem-card [problem]="problem"></problem-card>
                         </div>
                     </div>
