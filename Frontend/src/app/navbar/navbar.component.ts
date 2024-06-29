@@ -20,8 +20,9 @@ export class NavbarComponent implements OnInit {
         });
     }
 
-    logout(): void {
+    async logout(): Promise<void> {
         this.authService.logout();
+        await this.router.navigate([''])
     }
 
     async onCreateProblem(): Promise<void> {

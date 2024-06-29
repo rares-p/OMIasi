@@ -11,3 +11,18 @@ textarea {
     background-color: #f9f9f9;
     color: #333;
 }
+
+.table td {
+    word-wrap: break-word;
+    white-space: normal;
+    max-width: 200px; /* Adjust the width as needed */
+  }
+  
+  .overflow-hidden {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1; /* Number of lines to show */
+    -webkit-box-orient: vertical;
+  }
+  

@@ -4,6 +4,7 @@ import { UserService } from '../services/user/user.service';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Params, RouterModule } from '@angular/router';
 import { AuthService } from '../services/auth/auth.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'app-user-profile',
@@ -19,7 +20,8 @@ export class UserProfileComponent implements OnInit {
     constructor(
         private userService: UserService,
         private authService: AuthService,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private toastr: ToastrService
     ) {}
 
     async ngOnInit(): Promise<void> {
@@ -30,7 +32,19 @@ export class UserProfileComponent implements OnInit {
             this.username =
                 params['username'] || this.authService.getUserName();
             if (this.username) {
-                this.user = await this.userService.getProfile(this.username);
+                let response = await this.userService.getProfile(this.username);
+                if (response.success)
+                    this.user = {
+                        username: response.username,
+                        role: response.role,
+                        solvedProblems: response.solvedProblems,
+                        attemptedProblems: response.attemptedProblems,
+                    };
+                else
+                    this.toastr.error(
+                        response.error ??
+                            `Error searching user with username ${this.username}`
+                    );
             }
         });
 
@@ -50,11 +64,9 @@ export class UserProfileComponent implements OnInit {
         if (response.success) this.user.role = response.role;
     }
 
-    async deleteUser() :Promise<void> {
-        if(!this.user)
-            return
-        let response = await this.userService.deleteUser(this.user.username)
-        if(response.success)
-            this.user = undefined
+    async deleteUser(): Promise<void> {
+        if (!this.user) return;
+        let response = await this.userService.deleteUser(this.user.username);
+        if (response.success) this.user = undefined;
     }
 }
