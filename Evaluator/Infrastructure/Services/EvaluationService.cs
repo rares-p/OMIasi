@@ -10,8 +10,10 @@ public class EvaluationService(IProblemRepository problemRepository, ITestReposi
     : IEvaluationService
 {
     private readonly SemaphoreSlim _semaphore = new(2);
-    private readonly string _baseFolderPath = "/tmp/evaluate";
-    private readonly string _compilerPath = "/usr/bin/g++";
+    //private readonly string _baseFolderPath = "/tmp/evaluate";
+    //private readonly string _compilerPath = "/usr/bin/g++";
+    private readonly string _baseFolderPath = "D:\\Facultate\\Licenta\\Licenta\\Evaluator\\API\\evaluate";
+    private readonly string _compilerPath = "C:\\MinGW\\bin\\g++";
 
     public async Task<EvaluationResponse> Evaluate(Evaluation evaluation)
     {

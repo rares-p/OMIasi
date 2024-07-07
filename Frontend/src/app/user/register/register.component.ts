@@ -30,7 +30,7 @@ export class RegisterComponent {
                 firstName: ['', Validators.required],
                 lastName: ['', Validators.required],
                 email: ['', [Validators.required, Validators.email]],
-                username: ['', Validators.required], // Added username field
+                username: ['', Validators.required],
                 password: ['', [Validators.required, Validators.minLength(6)]],
                 confirmPassword: ['', Validators.required],
             },

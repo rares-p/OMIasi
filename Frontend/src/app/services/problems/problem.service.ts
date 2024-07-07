@@ -91,8 +91,6 @@ export class ProblemService {
             ...problem,
             tests: problem.tests.map((test) => ({
                 ...test,
-                // input: test.input.trim(),
-                // output: test.output.trim(),
             })),
         };
         let resp = await firstValueFrom(

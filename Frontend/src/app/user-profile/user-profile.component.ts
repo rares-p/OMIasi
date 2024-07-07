@@ -25,9 +25,6 @@ export class UserProfileComponent implements OnInit {
     ) {}
 
     async ngOnInit(): Promise<void> {
-        // this.username = this.route.snapshot.paramMap.get('username') ?? this.authService.getUserName()
-        // if(this.username)
-        //     this.user = await this.userService.getProfile(this.username);
         this.route.params.subscribe(async (params: Params) => {
             this.username =
                 params['username'] || this.authService.getUserName();

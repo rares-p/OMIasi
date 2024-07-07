@@ -13,6 +13,18 @@ public class OMIIasiDbContext(DbContextOptions<OMIIasiDbContext> options) : DbCo
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Submission>()
+            .HasOne<Problem>()
+            .WithMany()
+            .HasForeignKey(s => s.ProblemId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Submission>()
+            .HasOne<User>()
+            .WithMany()
+            .HasForeignKey(s => s.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
         modelBuilder.Entity<Submission>(entity =>
         {
             entity.OwnsMany(e => e.Scores, sa =>
