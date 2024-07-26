@@ -5,4 +5,5 @@ OMIIasi is a comprehensive platform designed to help students solve programming 
 
 ## Demo
 Here is a video
-https://youtu.be/UgRfDBvbI3g
+[![Video Title]]([https://www.youtube.com/watch?v=video_id](https://youtu.be/UgRfDBvbI3g))
+
