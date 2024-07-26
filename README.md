@@ -6,7 +6,3 @@ OMIIasi is a comprehensive platform designed to help students solve programming 
 ## Demo
 Here is a video with the main features of the application:
 
-<video width="600" controls>
-  <source src="https://github.com/rares-p/OMIasi/blob/main/demo.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
